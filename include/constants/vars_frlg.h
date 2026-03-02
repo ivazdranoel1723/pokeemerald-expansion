@@ -266,7 +266,7 @@
 #define VAR_0x40FB                 0x40FB
 #define VAR_0x40FC                 0x40FC
 #define VAR_0x40FD                 0x40FD
-#define VAR_0x40FE                 0x40FE
+#define VAR_SURF_MON_SLOT          0x40FE
 #define VAR_0x40FF                 0x40FF
 
 #define VARS_END_FRLG              0x40FF
