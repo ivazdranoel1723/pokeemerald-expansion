@@ -15566,6 +15566,55 @@ const struct ItemInfo gItemsInfo[] =
         .iconPalette = gItemIconPalette_GlimmeringCharm,
     },
 
+        [ITEM_POKE_VIAL] =
+    {
+        .name = ITEM_NAME("PokéVial"),
+        .price = 0,
+        .importance = 1,
+        .description = COMPOUND_STRING(
+            "The PokéVial\n"
+            "restores your party\n"
+            "entirely."),
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_FIELD,
+        .fieldUseFunc = ItemUseOutOfBattle_PokeVial,
+        .iconPic = gItemIcon_Flute,
+        .iconPalette = gItemIconPalette_BlueFlute,
+    },
+
+    [ITEM_INFINITE_CANDY] =
+    {
+        .name = ITEM_NAME("InfiniteCandy"),
+        .price = 0,
+        .importance = 1,
+        .description = COMPOUND_STRING(
+            "An ultra rare\n"
+            "candy that never\n"
+            "goes away."),
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_InfiniteCandy,
+        .effect = gItemEffect_RareCandy,
+        .iconPic = gItemIcon_RareCandy,
+        .iconPalette = gItemIconPalette_RareCandy,
+    },
+
+    [ITEM_INFINITE_REPEL] =
+    {
+        .name = ITEM_NAME("InfiniteRepel"),
+        .price = 0,
+        .importance = 1,
+        .description = COMPOUND_STRING(
+            "Repels all wild\n"
+            "Pokémon for any\n"
+            "number of steps."),
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_InfiniteRepel,
+        .iconPic = gItemIcon_Repel,
+        .iconPalette = gItemIconPalette_MaxRepel,
+    },
+
     [ITEM_METAL_ALLOY] =
     {
         .name = ITEM_NAME("Metal Alloy"),

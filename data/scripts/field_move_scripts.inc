@@ -425,6 +425,45 @@ EventScript_FailSweetScent::
 Text_FailSweetScent:
 	.string "Looks like there's nothing here…$"
 
+EventScript_DisableAutoRun::
+    msgbox AutoRunDisabled MSGBOX_SIGN
+    end
+AutoRunDisabled:
+    .string "Auto Run {COLOR RED}disabled{COLOR DARK_GRAY}.$"
+    
+EventScript_EnableAutoRun::
+    msgbox AutoRunEnabled MSGBOX_SIGN
+    end
+AutoRunEnabled:
+    .string "Auto Run {COLOR GREEN}enabled{COLOR DARK_GRAY}.$"
+
+EventScript_DisableFollowers::
+	callnative RemoveFollowingPokemon
+    msgbox FollowersDisabled MSGBOX_SIGN
+    end
+FollowersDisabled:
+    .string "Followers {COLOR RED}disabled{COLOR DARK_GRAY}.$"
+    
+EventScript_EnableFollowers::
+	callnative UpdateFollowingPokemon
+    msgbox FollowersEnabled MSGBOX_SIGN
+    end
+FollowersEnabled:
+    .string "Followers {COLOR GREEN}enabled{COLOR DARK_GRAY}.$"
+
+EventScript_DisableInfiniteRepel::
+    msgbox InfiniteRepelDisabled MSGBOX_SIGN
+    end
+InfiniteRepelDisabled:
+    .string "Infinite Repel {COLOR RED}disabled{COLOR DARK_GRAY}.$"
+    
+EventScript_EnableInfiniteRepel::
+    msgbox InfiniteRepelEnabled MSGBOX_SIGN
+    end
+InfiniteRepelEnabled:
+    .string "Infinite Repel {COLOR GREEN}enabled{COLOR DARK_GRAY}.$"
+
+
 EventScript_UseDefog::
 	lockall
 	bufferpartymonnick STR_VAR_1, VAR_RESULT

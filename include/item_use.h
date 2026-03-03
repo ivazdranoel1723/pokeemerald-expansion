@@ -1,6 +1,7 @@
 #ifndef GUARD_ITEM_USE_H
 #define GUARD_ITEM_USE_H
 
+extern const u8 PokeVialHealScript[];
 void ItemUseOutOfBattle_Mail(u8 taskId);
 void ItemUseOutOfBattle_Bike(u8 taskId);
 void ItemUseOutOfBattle_Rod(u8 taskId);
@@ -22,6 +23,7 @@ void ItemUseOutOfBattle_PPRecovery(u8 taskId);
 void ItemUseOutOfBattle_PPUp(u8 taskId);
 void ItemUseOutOfBattle_RareCandy(u8 taskId);
 void ItemUseOutOfBattle_DynamaxCandy(u8 taskId);
+void ItemUseOutOfBattle_InfiniteCandy(u8);
 void ItemUseOutOfBattle_TMHM(u8 taskId);
 void ItemUseOutOfBattle_Repel(u8 taskId);
 void ItemUseOutOfBattle_Lure(u8 taskId);
@@ -38,6 +40,9 @@ void ItemUseOutOfBattle_Fusion(u8 taskId);
 void ItemUseOutOfBattle_Honey(u8 taskId);
 void ItemUseOutOfBattle_CannotUse(u8 taskId);
 void ItemUseOutOfBattle_ExpShare(u8 taskId);
+void ItemUseOutOfBattle_PokeVial(u8);
+void ItemUseCB_PokeVial(u8);
+void ItemUseOutOfBattle_InfiniteRepel(u8);
 void ItemUseInBattle_BagMenu(u8 taskId);
 void ItemUseInBattle_PartyMenu(u8 taskId);
 void ItemUseInBattle_PartyMenuChooseMove(u8 taskId);

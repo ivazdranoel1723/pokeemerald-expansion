@@ -58,6 +58,22 @@ EventScript_PkmnCenterNurse_Goodbye_Frlg::
 	msgbox Text_WeHopeToSeeYouAgain_Frlg
 	return
 
+PokeVialHealScript::
+	special HealPlayerParty
+	callnative UpdateFollowingPokemon
+	msgbox PokeVialText, MSGBOX_SIGN
+	end
+
+PokeVialHealScriptItem::
+	special HealPlayerParty
+	callnative UpdateFollowingPokemon
+	msgbox PokeVialText, MSGBOX_DEFAULT
+	releaseall
+	end
+
+PokeVialText::
+	.string "Your party was fully healed.$"
+
 Movement_Bow::
 	nurse_joy_bow
 	delay_4

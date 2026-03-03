@@ -1215,9 +1215,9 @@
 
 // Unused?
 #define FLAG_0x4BD               0x4BD
-#define FLAG_0x4BE               0x4BE
-#define FLAG_0x4BF               0x4BF
-#define FLAG_0x4C0               0x4C0
+#define FLAG_ENTERED_ELITE_4     0x4BE
+#define FLAG_DISABLE_FOLLOWERS   0x4BF
+#define FLAG_USING_POKEMONPCMENU 0x4C0
 #define FLAG_0x4C1               0x4C1
 #define FLAG_0x4C2               0x4C2
 #define FLAG_0x4C3               0x4C3

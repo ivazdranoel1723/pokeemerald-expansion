@@ -219,6 +219,11 @@ static void (*const sPlayerNotOnBikeFuncs[])(enum Direction, u16) =
     [MOVING]         = PlayerNotOnBikeMoving,
 };
 
+static void PlayerNotOnBikeNotMoving(enum Direction direction, u16 heldKeys)
+{
+    PlayerFaceDirection(GetPlayerFacingDirection());
+}
+
 static bool8 (*const sAcroBikeTrickMetatiles[NUM_ACRO_BIKE_COLLISIONS])(u8) =
 {
     MetatileBehavior_IsBumpySlope,
@@ -724,10 +729,6 @@ static u8 CheckMovementInputNotOnBike(enum Direction direction)
         return gPlayerAvatar.runningState = MOVING;
 }
 
-static void PlayerNotOnBikeNotMoving(enum Direction direction, u16 heldKeys)
-{
-    PlayerFaceDirection(GetPlayerFacingDirection());
-}
 
 void UpdateSpinData(void)
 {
@@ -876,14 +877,6 @@ static void PlayerNotOnBikeMoving(enum Direction direction, u16 heldKeys)
         }
         else
         {
-            // Player collided with something. Certain collisions have special handling that precludes the normal collision effect.
-            // COLLISION_STOP_SURFING and COLLISION_PUSHED_BOULDER's effects are started by CheckForObjectEventCollision.
-            // COLLISION_LEDGE_JUMP's effect is handled further up in this function, so it will never reach this point.
-            // COLLISION_ROTATING_GATE is unusual however, this was probably included by mistake. When the player walks into a
-            // rotating gate that cannot rotate there is no additional handling, it's just a regular collision. Its exclusion here
-            // means that the player avatar won't update if they encounter this kind of collision. This has two noticeable effects:
-            // - Colliding with it head-on stops the player dead, rather than playing the walking animation and playing a bump sound effect
-            // - Colliding with it by changing direction won't turn the player avatar, their walking animation will just speed up.
 #ifdef BUGFIX
             if (collision != COLLISION_STOP_SURFING
              && collision != COLLISION_LEDGE_JUMP
@@ -901,8 +894,10 @@ static void PlayerNotOnBikeMoving(enum Direction direction, u16 heldKeys)
         }
     }
 
-    ResetSpinTimer(); // Everything below will move the player a space, reset the timer.
+    ResetSpinTimer();
     gPlayerAvatar.creeping = FALSE;
+
+    // --- SURFING (Emerald Imperium auto-run compatible) ---
     if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_SURFING)
     {
         if (FlagGet(DN_FLAG_SEARCHING) && (heldKeys & A_BUTTON))
@@ -912,18 +907,46 @@ static void PlayerNotOnBikeMoving(enum Direction direction, u16 heldKeys)
         }
         else
         {
-            // speed 2 is fast, same speed as running
+            // Emerald Imperium: surfing uses fast walk (same as running)
             PlayerWalkFast(direction);
         }
         return;
     }
 
+    // --- AUTO-RUN MERGE START ---
+    // Auto-run triggers if:
+    //  - B is held OR autoRun flag is enabled
+    //  - Running is allowed
+    //  - Not underwater
+    //  - No follower blocking
+    //  - Dowsing rod not active (if applicable)
+    bool32 wantsRun = FALSE;
+
     if (!(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_UNDERWATER)
-     && (heldKeys & B_BUTTON)
-     && FlagGet(FLAG_SYS_B_DASH)
-     && IsRunningDisallowed(gObjectEvents[gPlayerAvatar.objectEventId].currentMetatileBehavior) == 0
-     && !FollowerNPCComingThroughDoor()
-     && (I_ORAS_DOWSING_FLAG == 0 || (I_ORAS_DOWSING_FLAG != 0 && !FlagGet(I_ORAS_DOWSING_FLAG))))
+        && FlagGet(FLAG_SYS_B_DASH)
+        && IsRunningDisallowed(gObjectEvents[gPlayerAvatar.objectEventId].currentMetatileBehavior) == 0
+        && !FollowerNPCComingThroughDoor()
+        && (I_ORAS_DOWSING_FLAG == 0 || !FlagGet(I_ORAS_DOWSING_FLAG)))
+    {
+        // Emerald Imperium logic:
+        // If autoRun is ON, player runs by default.
+        // If B is held while autoRun is ON → walk instead.
+        // If autoRun is OFF, B triggers running.
+        if (gSaveBlock2Ptr->autoRun)
+        {
+            if (heldKeys & B_BUTTON)
+                wantsRun = FALSE;  // B overrides auto-run → walk
+            else
+                wantsRun = TRUE;   // auto-run active
+        }
+        else
+        {
+            if (heldKeys & B_BUTTON)
+                wantsRun = TRUE;   // normal B-to-run
+        }
+    }
+
+    if (wantsRun)
     {
         if (ObjectMovingOnRockStairs(&gObjectEvents[gPlayerAvatar.objectEventId], direction))
             PlayerRunSlow(direction);
@@ -933,6 +956,9 @@ static void PlayerNotOnBikeMoving(enum Direction direction, u16 heldKeys)
         gPlayerAvatar.flags |= PLAYER_AVATAR_FLAG_DASH;
         return;
     }
+    // --- AUTO-RUN MERGE END ---
+
+    // Creeping (A button)
     else if (FlagGet(DN_FLAG_SEARCHING) && (heldKeys & A_BUTTON))
     {
         gPlayerAvatar.creeping = TRUE;
