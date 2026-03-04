@@ -120,6 +120,7 @@ void UpdatePocketItemList(enum Pocket pocketId);
 void DisplayItemMessage(u8 taskId, u8 fontId, const u8 *str, TaskFunc callback);
 void DisplayItemMessageOnField(u8 taskId, const u8 *string, TaskFunc callback);
 void CloseItemMessage(u8 taskId);
+s32 RegisteredItemIndex(u16 item);
 void ItemMenu_RotomCatalog(u8 taskId);
 void SortItemsInBag(struct BagPocket *pocket, enum BagSortOptions type);
 
