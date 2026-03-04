@@ -9,6 +9,8 @@
 #include "script_pokemon_util.h"
 #include "tv.h"
 #include "constants/heal_locations.h"
+#include "item.h"
+#include "constants/items.h"
 
 int GameClear(void)
 {
@@ -65,6 +67,16 @@ int GameClear(void)
     {
         IncrementGameStat(GAME_STAT_RECEIVED_RIBBONS);
         FlagSet(FLAG_SYS_RIBBON_GET);
+
+        if ( !(CheckBagHasItem(ITEM_AURORA_TICKET, 1) << 24) )
+        {
+            AddBagItem(ITEM_AURORA_TICKET, 1);
+            FlagSet(FLAG_ENABLE_SHIP_BIRTH_ISLAND);
+            FlagSet(FLAG_RECEIVED_AURORA_TICKET);
+            AddBagItem(ITEM_MYSTIC_TICKET, 1);
+            FlagSet(FLAG_ENABLE_SHIP_NAVEL_ROCK);
+            FlagSet(FLAG_RECEIVED_MYSTIC_TICKET);
+        }
 
         for (i = 1; i < 6; i++)
         {

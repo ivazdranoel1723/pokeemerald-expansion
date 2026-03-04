@@ -1,85 +1,129 @@
 PewterCity_Gym_Frlg_MapScripts::
-	.byte 0
+    .byte 0
 
 PewterCity_Gym_EventScript_Brock::
-	famechecker FAMECHECKER_BROCK, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
-	trainerbattle_single TRAINER_LEADER_BROCK, PewterCity_Gym_Text_BrockIntro, PewterCity_Gym_Text_BrockDefeat, PewterCity_Gym_EventScript_DefeatedBrock, NO_MUSIC
-	goto_if_unset FLAG_GOT_TM39_FROM_BROCK, PewterCity_Gym_EventScript_GiveTM39
-	msgbox PewterCity_Gym_Text_BrockPostBattle
-	release
-	end
+    lock
+    faceplayer
+    famechecker FAMECHECKER_BROCK, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
+    goto_if_set FLAG_DEFEATED_BROCK, PewterCity_Gym_EventScript_BrockPostBattle
+
+    getpartysize
+    compare VAR_RESULT, 4          @ Brock has 4 Pokémon
+    goto_if_eq PewterCity_Gym_EventScript_StartBattle
+
+    msgbox PewterCity_Gym_Text_BrockIntro, MSGBOX_DEFAULT
+    msgbox PewterCity_Gym_Text_RulesExplain, MSGBOX_YESNO
+    compare VAR_RESULT, NO
+    goto_if_eq PewterCity_Gym_EventScript_Refused
+
+    special ShowPokemonStorageSystemPC
+    waitstate
+
+    getpartysize
+    compare VAR_RESULT, 4
+    goto_if_eq PewterCity_Gym_EventScript_StartBattle_FromPC
+    goto PewterCity_Gym_EventScript_StillNot4
+
+PewterCity_Gym_EventScript_StartBattle::
+    trainerbattle_single TRAINER_LEADER_BROCK, PewterCity_Gym_Text_BrockIntro, PewterCity_Gym_Text_BrockDefeat, PewterCity_Gym_EventScript_DefeatedBrock, NO_MUSIC
+    goto_if_unset FLAG_GOT_TM39_FROM_BROCK, PewterCity_Gym_EventScript_GiveTM39
+    msgbox PewterCity_Gym_Text_BrockPostBattle
+    release
+    end
+
+PewterCity_Gym_EventScript_StartBattle_FromPC::
+    trainerbattle_single TRAINER_LEADER_BROCK, PewterCity_Gym_Text_BrockReady, PewterCity_Gym_Text_BrockDefeat, PewterCity_Gym_EventScript_DefeatedBrock, NO_MUSIC
+    goto_if_unset FLAG_GOT_TM39_FROM_BROCK, PewterCity_Gym_EventScript_GiveTM39
+    msgbox PewterCity_Gym_Text_BrockPostBattle
+    release
+    end
+
+PewterCity_Gym_EventScript_Refused::
+    msgbox PewterCity_Gym_Text_Refused, MSGBOX_DEFAULT
+    release
+    end
+
+PewterCity_Gym_EventScript_BrockPostBattle::
+    msgbox PewterCity_Gym_Text_BrockPostBattle
+    release
+    end
+
+PewterCity_Gym_EventScript_StillNot4::
+    msgbox PewterCity_Gym_Text_StillNot4, MSGBOX_DEFAULT
+    release
+    end
 
 PewterCity_Gym_EventScript_DefeatedBrock::
-	famechecker FAMECHECKER_BROCK, 1
-	setflag FLAG_DEFEATED_BROCK
-	setflag FLAG_BADGE01_GET
-	setvar VAR_MAP_SCENE_PEWTER_CITY, 1
-	setflag FLAG_HIDE_PEWTER_CITY_GYM_GUIDE
-	clearflag FLAG_HIDE_PEWTER_CITY_RUNNING_SHOES_GUY
-	set_gym_trainers_frlg 1
-	goto PewterCity_Gym_EventScript_GiveTM39
-	end
+    famechecker FAMECHECKER_BROCK, 1
+    setflag FLAG_DEFEATED_BROCK
+    setflag FLAG_BADGE01_GET
+    setvar VAR_MAP_SCENE_PEWTER_CITY, 1
+    setflag FLAG_HIDE_PEWTER_CITY_GYM_GUIDE
+    clearflag FLAG_HIDE_PEWTER_CITY_RUNNING_SHOES_GUY
+    set_gym_trainers_frlg 1
+    goto PewterCity_Gym_EventScript_GiveTM39
+    end
 
 PewterCity_Gym_EventScript_GiveTM39::
-	msgbox PewterCity_Gym_Text_TakeThisWithYou
-	checkitemspace ITEM_TM39
-	goto_if_eq VAR_RESULT, FALSE, PewterCity_Gym_EventScript_NoRoomForTM39
-	giveitem_msg PewterCity_Gym_Text_ReceivedTM39FromBrock, ITEM_TM39
-	setflag FLAG_GOT_TM39_FROM_BROCK
-	msgbox PewterCity_Gym_Text_ExplainTM39
-	release
-	end
+    msgbox PewterCity_Gym_Text_TakeThisWithYou
+    checkitemspace ITEM_TM39
+    goto_if_eq VAR_RESULT, FALSE, PewterCity_Gym_EventScript_NoRoomForTM39
+    giveitem_msg PewterCity_Gym_Text_ReceivedTM39FromBrock, ITEM_TM39
+    setflag FLAG_GOT_TM39_FROM_BROCK
+    msgbox PewterCity_Gym_Text_ExplainTM39
+    release
+    end
 
 PewterCity_Gym_EventScript_NoRoomForTM39::
-	msgbox PewterCity_Gym_Text_DontHaveRoomForThis
-	release
-	end
+    msgbox PewterCity_Gym_Text_DontHaveRoomForThis
+    release
+    end
 
 PewterCity_Gym_EventScript_Liam::
-	trainerbattle_single TRAINER_CAMPER_LIAM, PewterCity_Gym_Text_LiamIntro, PewterCity_Gym_Text_LiamDefeat
-	msgbox PewterCity_Gym_Text_LiamPostBattle, MSGBOX_AUTOCLOSE
-	end
+    trainerbattle_single TRAINER_CAMPER_LIAM, PewterCity_Gym_Text_LiamIntro, PewterCity_Gym_Text_LiamDefeat
+    msgbox PewterCity_Gym_Text_LiamPostBattle, MSGBOX_AUTOCLOSE
+    end
 
 PewterCity_Gym_EventScript_GymGuy::
-	lock
-	faceplayer
-	goto_if_set FLAG_DEFEATED_BROCK, PewterCity_Gym_EventScript_GymGuyPostVictory
-	msgbox PewterCity_Gym_Text_LetMeTakeYouToTheTop, MSGBOX_YESNO
-	goto_if_eq VAR_RESULT, YES, PewterCity_Gym_EventScript_GymGuyTakeMeToTop
-	goto_if_eq VAR_RESULT, NO, PewterCity_Gym_EventScript_GymGuyDontTakeMeToTop
-	end
+    lock
+    faceplayer
+    goto_if_set FLAG_DEFEATED_BROCK, PewterCity_Gym_EventScript_GymGuyPostVictory
+    msgbox PewterCity_Gym_Text_LetMeTakeYouToTheTop, MSGBOX_YESNO
+    goto_if_eq VAR_RESULT, YES, PewterCity_Gym_EventScript_GymGuyTakeMeToTop
+    goto_if_eq VAR_RESULT, NO, PewterCity_Gym_EventScript_GymGuyDontTakeMeToTop
+    end
 
 PewterCity_Gym_EventScript_GymGuyPostVictory::
-	msgbox PewterCity_Gym_Text_YoureChampMaterial
-	release
-	end
+    msgbox PewterCity_Gym_Text_YoureChampMaterial
+    release
+    end
 
 PewterCity_Gym_EventScript_GymGuyTakeMeToTop::
-	msgbox PewterCity_Gym_Text_LetsGetHappening
-	goto PewterCity_Gym_EventScript_GymGuyAdvice
-	end
+    msgbox PewterCity_Gym_Text_LetsGetHappening
+    goto PewterCity_Gym_EventScript_GymGuyAdvice
+    end
 
 PewterCity_Gym_EventScript_GymGuyDontTakeMeToTop::
-	msgbox PewterCity_Gym_Text_ItsFreeLetsGetHappening
-	goto PewterCity_Gym_EventScript_GymGuyAdvice
-	end
+    msgbox PewterCity_Gym_Text_ItsFreeLetsGetHappening
+    goto PewterCity_Gym_EventScript_GymGuyAdvice
+    end
 
 PewterCity_Gym_EventScript_GymGuyAdvice::
-	msgbox PewterCity_Gym_Text_TryDifferentPartyOrders
-	release
-	end
+    msgbox PewterCity_Gym_Text_TryDifferentPartyOrders
+    release
+    end
 
 PewterCity_Gym_EventScript_GymStatue::
-	lockall
-	goto_if_set FLAG_BADGE01_GET, PewterCity_Gym_EventScript_GymStatuePostVictory
-	msgbox PewterCity_Gym_Text_GymStatue
-	releaseall
-	end
+    lockall
+    goto_if_set FLAG_BADGE01_GET, PewterCity_Gym_EventScript_GymStatuePostVictory
+    msgbox PewterCity_Gym_Text_GymStatue
+    releaseall
+    end
 
 PewterCity_Gym_EventScript_GymStatuePostVictory::
-	msgbox PewterCity_Gym_Text_GymStatuePlayerWon
-	releaseall
-	end
+    msgbox PewterCity_Gym_Text_GymStatuePlayerWon
+    releaseall
+    end
 
 PewterCity_Gym_Text_BrockIntro::
 	.string "So, you're here. I'm BROCK.\n"
@@ -199,4 +243,31 @@ PewterCity_Gym_Text_GymStatuePlayerWon::
 	.string "LEADER: BROCK\p"
 	.string "WINNING TRAINERS:\n"
 	.string "{RIVAL}, {PLAYER}$"
+
+PewterCity_Gym_Text_RulesExplain::
+    .string "However, there is a condition.\p"
+    .string "Gym battles require challengers to\n"
+    .string "use the same amount of Pokemon.\p"
+    .string "A true Trainer must show adaptability\n"
+    .string "within limits.\p"
+    .string "Would you like to access the PC to\n"
+    .string "organize your team?$"
+
+PewterCity_Gym_Text_Refused::
+    .string "Come back when you have exactly\n"
+    .string "four Pokémon.\p"
+    .string "Discipline is the foundation of\n"
+    .string "victory.$"
+
+PewterCity_Gym_Text_StillNot4::
+    .string "You still don't have exactly\n"
+    .string "four Pokémon.\p"
+    .string "I cannot battle a Trainer who\n"
+    .string "ignores the rules.$"
+
+PewterCity_Gym_Text_BrockReady::
+    .string "I see you've prepared your team.\n"
+    .string "Your determination is solid.\p"
+    .string "Now, show me your rock-hard will!{PLAY_BGM}{MUS_RG_ENCOUNTER_GYM_LEADER}$"
+
 

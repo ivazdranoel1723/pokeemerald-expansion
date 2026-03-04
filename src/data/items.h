@@ -15877,6 +15877,23 @@ const struct ItemInfo gItemsInfo[] =
         .iconPic = gItemIcon_PokeshiDoll,
         .iconPalette = gItemIconPalette_PokeshiDoll,
     },
+    // Start hexorb branch
+    [ITEM_HEXORB] =
+    {
+        .name = ITEM_NAME("Hexorb"),
+        .price = 0,
+        .description = COMPOUND_STRING(
+            "A purple orb\n"
+            "said to contain a\n"
+            "cursed power."),
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_Hexorb,
+        .effect = gItemEffect_Hexorb,
+        .iconPic = gItemIcon_Hexorb,
+        .iconPalette = gItemIconPalette_Hexorb,
+    },
+// End hexorb Branch
 };
 
 #undef ITEM_NAME

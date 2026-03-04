@@ -1053,6 +1053,7 @@ enum __attribute__((packed)) Item
     ITEM_POKE_VIAL = 874,
     ITEM_INFINITE_REPEL = 875,
     ITEM_INFINITE_CANDY = 876,
+    ITEM_HEXORB = 877,
 
     ITEMS_COUNT,
     ITEM_FIELD_ARROW = ITEMS_COUNT,

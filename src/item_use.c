@@ -80,6 +80,10 @@ static void SetDistanceOfClosestHiddenItem(u8, s16, s16);
 static void CB2_OpenPokeblockFromBag(void);
 static void ItemUseOnFieldCB_Honey(u8 taskId);
 static bool32 IsValidLocationForVsSeeker(void);
+// Start hexorb Branch
+void ItemUseOutOfBattle_Hexorb(u8 taskId);
+void Task_OpenRegisteredHexorb(u8 taskId);
+// End hexorb Branch
 
 static const u8 sText_CantDismountBike[] = _("You can't dismount your BIKE here.{PAUSE_UNTIL_PRESS}");
 static const u8 sText_ItemFinderNearby[] = _("Huh?\nThe ITEMFINDER's responding!\pThere's an item buried around here!{PAUSE_UNTIL_PRESS}");
@@ -1635,6 +1639,34 @@ void Task_ItemUse_CloseMessageBoxAndReturnToField_VsSeeker(u8 taskId)
 {
     Task_CloseCantUseKeyItemMessage(taskId);
 }
+
+// Start hexorb Branch
+void ItemUseOutOfBattle_Hexorb(u8 taskId)
+{
+    gItemUseCB = ItemUseCB_UseHexorb;
+
+    if (gTasks[taskId].tUsingRegisteredKeyItem != TRUE)
+    {
+        SetUpItemUseCallback(taskId);
+    }
+    else
+    {
+        gFieldCallback = FieldCB_ReturnToFieldNoScript;
+        FadeScreen(FADE_TO_BLACK, 0);
+        gTasks[taskId].func = Task_OpenRegisteredHexorb;
+    }
+}
+
+void Task_OpenRegisteredHexorb(u8 taskId)
+{
+    if (!gPaletteFade.active)
+    {
+        CleanupOverworldWindowsAndTilemaps();
+        InitPartyMenuForHexorbFromField(taskId);
+        DestroyTask(taskId);
+    }
+}
+// End hexorb Branch
 
 static void Task_DisplayPokeFluteMessage(u8 taskId)
 {

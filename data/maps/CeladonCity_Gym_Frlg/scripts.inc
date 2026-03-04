@@ -2,37 +2,89 @@ CeladonCity_Gym_Frlg_MapScripts::
 	.byte 0
 
 CeladonCity_Gym_EventScript_Erika::
-	famechecker FAMECHECKER_ERIKA, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
-	trainerbattle_single TRAINER_LEADER_ERIKA, CeladonCity_Gym_Text_ErikaIntro, CeladonCity_Gym_Text_ErikaDefeat, CeladonCity_Gym_EventScript_DefeatedErika, NO_MUSIC
-	goto_if_unset FLAG_GOT_TM19_FROM_ERIKA, CeladonCity_Gym_EventScript_GiveTM19
-	famechecker FAMECHECKER_ERIKA, 4
-	msgbox CeladonCity_Gym_Text_ErikaPostBattle
-	release
-	end
+    lock
+    faceplayer
+    famechecker FAMECHECKER_ERIKA, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
+    goto_if_set FLAG_DEFEATED_ERIKA, CeladonCity_Gym_EventScript_ErikaPostBattle
+
+    @ --- PARTY SIZE CHECK ---
+    getpartysize
+    compare VAR_RESULT, 5
+    goto_if_eq CeladonCity_Gym_EventScript_StartBattle
+
+    msgbox CeladonCity_Gym_Text_ErikaIntro, MSGBOX_DEFAULT
+    msgbox CeladonCity_Gym_Text_RulesExplain, MSGBOX_YESNO
+    compare VAR_RESULT, NO
+    goto_if_eq CeladonCity_Gym_EventScript_Refused
+
+    special ShowPokemonStorageSystemPC
+    waitstate
+
+    getpartysize
+    compare VAR_RESULT, 5
+    goto_if_eq CeladonCity_Gym_EventScript_StartBattle_FromPC
+    goto CeladonCity_Gym_EventScript_StillNot5
+    @ -------------------------
+
+CeladonCity_Gym_EventScript_StartBattle::
+    setstartingstatus STARTING_STATUS_GRASSY_TERRAIN
+    trainerbattle_single TRAINER_LEADER_ERIKA, CeladonCity_Gym_Text_ErikaIntro, CeladonCity_Gym_Text_ErikaDefeat, CeladonCity_Gym_EventScript_DefeatedErika, NO_MUSIC
+    goto_if_unset FLAG_GOT_TM19_FROM_ERIKA, CeladonCity_Gym_EventScript_GiveTM19
+    famechecker FAMECHECKER_ERIKA, 4
+    msgbox CeladonCity_Gym_Text_ErikaPostBattle
+    release
+    end
+
+CeladonCity_Gym_EventScript_StartBattle_FromPC::
+    setstartingstatus STARTING_STATUS_GRASSY_TERRAIN
+    trainerbattle_single TRAINER_LEADER_ERIKA, CeladonCity_Gym_Text_ErikaReady, CeladonCity_Gym_Text_ErikaDefeat, CeladonCity_Gym_EventScript_DefeatedErika, NO_MUSIC
+    goto_if_unset FLAG_GOT_TM19_FROM_ERIKA, CeladonCity_Gym_EventScript_GiveTM19
+    famechecker FAMECHECKER_ERIKA, 4
+    msgbox CeladonCity_Gym_Text_ErikaPostBattle
+    release
+    end
+
+CeladonCity_Gym_EventScript_Refused::
+    msgbox CeladonCity_Gym_Text_Refused, MSGBOX_DEFAULT
+    release
+    end
+
+CeladonCity_Gym_EventScript_StillNot5::
+    msgbox CeladonCity_Gym_Text_StillNot5, MSGBOX_DEFAULT
+    release
+    end
 
 CeladonCity_Gym_EventScript_DefeatedErika::
-	famechecker FAMECHECKER_ERIKA, 1
-	clearflag FLAG_HIDE_FAME_CHECKER_ERIKA_JOURNALS
-	setflag FLAG_DEFEATED_ERIKA
-	setflag FLAG_BADGE04_GET
-	set_gym_trainers_frlg 4
-	goto CeladonCity_Gym_EventScript_GiveTM19
-	end
+    famechecker FAMECHECKER_ERIKA, 1
+    clearflag FLAG_HIDE_FAME_CHECKER_ERIKA_JOURNALS
+    setflag FLAG_DEFEATED_ERIKA
+    setflag FLAG_BADGE04_GET
+    set_gym_trainers_frlg 4
+    goto CeladonCity_Gym_EventScript_GiveTM19
+    end
 
 CeladonCity_Gym_EventScript_GiveTM19::
-	msgbox CeladonCity_Gym_Text_ExplainRainbowBadgeTakeThis
-	checkitemspace ITEM_TM19
-	goto_if_eq VAR_RESULT, FALSE, CeladonCity_Gym_EventScript_NoRoomForTM19
-	giveitem_msg CeladonCity_Gym_Text_ReceivedTM19FromErika, ITEM_TM19
-	setflag FLAG_GOT_TM19_FROM_ERIKA
-	msgbox CeladonCity_Gym_Text_ExplainTM19
-	release
-	end
+    msgbox CeladonCity_Gym_Text_ExplainRainbowBadgeTakeThis
+    checkitemspace ITEM_TM19
+    goto_if_eq VAR_RESULT, FALSE, CeladonCity_Gym_EventScript_NoRoomForTM19
+    giveitem_msg CeladonCity_Gym_Text_ReceivedTM19FromErika, ITEM_TM19
+    setflag FLAG_GOT_TM19_FROM_ERIKA
+    msgbox CeladonCity_Gym_Text_ExplainTM19
+
+    msgbox CeladonCity_Gym_Text_OfferPCRetrieve, MSGBOX_YESNO
+    compare VAR_RESULT, NO
+    goto_if_eq CeladonCity_Gym_EventScript_EndInteract
+    special ShowPokemonStorageSystemPC
+    waitstate
+
+CeladonCity_Gym_EventScript_EndInteract::
+    release
+    end
 
 CeladonCity_Gym_EventScript_NoRoomForTM19::
-	msgbox CeladonCity_Gym_Text_ShouldMakeRoomForThis
-	release
-	end
+    msgbox CeladonCity_Gym_Text_ShouldMakeRoomForThis
+    release
+    end
 
 CeladonCity_Gym_EventScript_Kay::
 	trainerbattle_single TRAINER_LASS_KAY, CeladonCity_Gym_Text_KayIntro, CeladonCity_Gym_Text_KayDefeat
@@ -77,6 +129,11 @@ CeladonCity_Gym_EventScript_GymStatue::
 	msgbox CeladonCity_Gym_Text_GymStatue
 	releaseall
 	end
+
+CeladonCity_Gym_EventScript_ErikaPostBattle::
+    msgbox CeladonCity_Gym_Text_ErikaPostBattle
+    release
+    end
 
 CeladonCity_Gym_EventScript_GymStatuePostVictory::
 	msgbox CeladonCity_Gym_Text_GymStatuePlayerWon
@@ -234,4 +291,33 @@ CeladonCity_Gym_Text_GymStatuePlayerWon::
 	.string "LEADER: ERIKA\p"
 	.string "WINNING TRAINERS:\n"
 	.string "{RIVAL}, {PLAYER}$"
+
+CeladonCity_Gym_Text_RulesExplain::
+    .string "However, Gym battles require you to\n"
+    .string "use the same amount of Pokemon.\p"
+    .string "It would be unfair to overwhelm my\n"
+    .string "plants with numbers.\p"
+    .string "Do you want to open the Storage\n"
+    .string "System to organize your party?$"
+
+CeladonCity_Gym_Text_Refused::
+    .string "Please come back when you have\n"
+    .string "exactly five Pokémon.\p"
+    .string "My flowers will be waiting.$"
+
+CeladonCity_Gym_Text_StillNot5::
+    .string "Oh, my… You still don't have\n"
+    .string "exactly five Pokémon.\p"
+    .string "I cannot accept your challenge yet.$"
+
+CeladonCity_Gym_Text_OfferPCRetrieve::
+    .string "You fought beautifully.\p"
+    .string "Do you want to open the Storage\n"
+    .string "System to organize your party?$"
+
+CeladonCity_Gym_Text_ErikaReady::
+    .string "I see you have arranged your party.\n"
+    .string "Very well then.\p"
+    .string "Shall we begin the match?{PLAY_BGM MUS_RG_ENCOUNTER_GYM_LEADER}$"
+
 

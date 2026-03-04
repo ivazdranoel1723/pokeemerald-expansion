@@ -3429,6 +3429,11 @@ extern const u32 gMailTilemap_Retro[];
 extern const u8 gMonMarkingsMenu_Gfx[];
 extern const u16 gMonMarkingsMenu_Pal[];
 
+// Start hexorb branch
+extern const u32 gItemIcon_Hexorb[];
+extern const u16 gItemIconPalette_Hexorb[];
+// End hexorb Branch
+
 extern const u32 gBattleIcons_Gfx1[];
 extern const u32 gBattleIcons_Gfx2[];
 extern const u16 gBattleIcons_Pal1[];

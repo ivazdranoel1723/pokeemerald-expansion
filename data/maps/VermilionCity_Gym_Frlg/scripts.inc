@@ -202,41 +202,93 @@ VermilionCity_Gym_EventScript_SetBeamsOn::
 	return
 
 VermilionCity_Gym_EventScript_LtSurge::
-	famechecker FAMECHECKER_LTSURGE, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
-	trainerbattle_single TRAINER_LEADER_LT_SURGE, VermilionCity_Gym_Text_LtSurgeIntro, VermilionCity_Gym_Text_LtSurgeDefeat, VermilionCity_Gym_EventScript_DefeatedLtSurge, NO_MUSIC
-	goto_if_unset FLAG_GOT_TM34_FROM_SURGE, VermilionCity_Gym_EventScript_GiveTM34
-	msgbox VermilionCity_Gym_Text_LtSurgePostBattle
-	release
-	end
+    lock
+    faceplayer
+    famechecker FAMECHECKER_LTSURGE, FCPICKSTATE_COLORED, UpdatePickStateFromSpecialVar8005
+    goto_if_set FLAG_DEFEATED_LT_SURGE, VermilionCity_Gym_EventScript_LtSurgePostBattle
+
+    @ --- PARTY SIZE CHECK ---
+    getpartysize
+    compare VAR_RESULT, 5
+    goto_if_eq VermilionCity_Gym_EventScript_StartBattle
+
+    msgbox VermilionCity_Gym_Text_LtSurgeIntro, MSGBOX_DEFAULT
+    msgbox VermilionCity_Gym_Text_RulesExplain, MSGBOX_YESNO
+    compare VAR_RESULT, NO
+    goto_if_eq VermilionCity_Gym_EventScript_Refused
+
+    special ShowPokemonStorageSystemPC
+    waitstate
+
+    getpartysize
+    compare VAR_RESULT, 5
+    goto_if_eq VermilionCity_Gym_EventScript_StartBattle_FromPC
+    goto VermilionCity_Gym_EventScript_StillNot5
+    @ -------------------------
+
+VermilionCity_Gym_EventScript_StartBattle::
+    setstartingstatus STARTING_STATUS_ELECTRIC_TERRAIN
+    trainerbattle_single TRAINER_LEADER_LT_SURGE, VermilionCity_Gym_Text_LtSurgeIntro, VermilionCity_Gym_Text_LtSurgeDefeat, VermilionCity_Gym_EventScript_DefeatedLtSurge, NO_MUSIC
+    goto_if_unset FLAG_GOT_TM34_FROM_SURGE, VermilionCity_Gym_EventScript_GiveTM34
+    msgbox VermilionCity_Gym_Text_LtSurgePostBattle
+    release
+    end
+
+VermilionCity_Gym_EventScript_StartBattle_FromPC::
+    setstartingstatus STARTING_STATUS_ELECTRIC_TERRAIN
+    trainerbattle_single TRAINER_LEADER_LT_SURGE, VermilionCity_Gym_Text_LtSurgeReady, VermilionCity_Gym_Text_LtSurgeDefeat, VermilionCity_Gym_EventScript_DefeatedLtSurge, NO_MUSIC
+    goto_if_unset FLAG_GOT_TM34_FROM_SURGE, VermilionCity_Gym_EventScript_GiveTM34
+    msgbox VermilionCity_Gym_Text_LtSurgePostBattle
+    release
+    end
+
+VermilionCity_Gym_EventScript_Refused::
+    msgbox VermilionCity_Gym_Text_Refused, MSGBOX_DEFAULT
+    release
+    end
+
+VermilionCity_Gym_EventScript_StillNot5::
+    msgbox VermilionCity_Gym_Text_StillNot5, MSGBOX_DEFAULT
+    release
+    end
 
 VermilionCity_Gym_EventScript_DefeatedLtSurge::
-	famechecker FAMECHECKER_LTSURGE, 1
-	call_if_unset FLAG_GOT_HM05, VermilionCity_Gym_EventScript_ShowOaksAide
-	clearflag FLAG_HIDE_FAME_CHECKER_LT_SURGE_JOURNAL
-	setflag FLAG_DEFEATED_LT_SURGE
-	setflag FLAG_BADGE03_GET
-	set_gym_trainers_frlg 3
-	goto VermilionCity_Gym_EventScript_GiveTM34
-	end
+    famechecker FAMECHECKER_LTSURGE, 1
+    call_if_unset FLAG_GOT_HM05, VermilionCity_Gym_EventScript_ShowOaksAide
+    clearflag FLAG_HIDE_FAME_CHECKER_LT_SURGE_JOURNAL
+    setflag FLAG_DEFEATED_LT_SURGE
+    setflag FLAG_BADGE03_GET
+    set_gym_trainers_frlg 3
+    goto VermilionCity_Gym_EventScript_GiveTM34
+    end
 
 VermilionCity_Gym_EventScript_ShowOaksAide::
-	clearflag FLAG_HIDE_VERMILION_CITY_OAKS_AIDE
-	return
+    clearflag FLAG_HIDE_VERMILION_CITY_OAKS_AIDE
+    return
 
 VermilionCity_Gym_EventScript_GiveTM34::
-	msgbox VermilionCity_Gym_Text_ExplainThunderBadgeTakeThis
-	checkitemspace ITEM_TM34
-	goto_if_eq VAR_RESULT, FALSE, VermilionCity_Gym_EventScript_NoRoomForTM34
-	giveitem_msg VermilionCity_Gym_Text_ReceivedTM34FromLtSurge, ITEM_TM34
-	setflag FLAG_GOT_TM34_FROM_SURGE
-	msgbox VermilionCity_Gym_Text_ExplainTM34
-	release
-	end
+    msgbox VermilionCity_Gym_Text_ExplainThunderBadgeTakeThis
+    checkitemspace ITEM_TM34
+    goto_if_eq VAR_RESULT, FALSE, VermilionCity_Gym_EventScript_NoRoomForTM34
+    giveitem_msg VermilionCity_Gym_Text_ReceivedTM34FromLtSurge, ITEM_TM34
+    setflag FLAG_GOT_TM34_FROM_SURGE
+    msgbox VermilionCity_Gym_Text_ExplainTM34
+
+    msgbox VermilionCity_Gym_Text_OfferPCRetrieve, MSGBOX_YESNO
+    compare VAR_RESULT, NO
+    goto_if_eq VermilionCity_Gym_EventScript_EndInteract
+    special ShowPokemonStorageSystemPC
+    waitstate
+
+VermilionCity_Gym_EventScript_EndInteract::
+    release
+    end
 
 VermilionCity_Gym_EventScript_NoRoomForTM34::
-	msgbox VermilionCity_Gym_Text_MakeRoomInYourBag
-	release
-	end
+    msgbox VermilionCity_Gym_Text_MakeRoomInYourBag
+    release
+    end
+
 
 VermilionCity_Gym_EventScript_Dwayne::
 	trainerbattle_single TRAINER_SAILOR_DWAYNE, VermilionCity_Gym_Text_DwayneIntro, VermilionCity_Gym_Text_DwayneDefeat
@@ -284,6 +336,11 @@ VermilionCity_Gym_EventScript_GymStatuePostVictory::
 	msgbox VermilionCity_Gym_Text_GymStatuePlayerWon
 	releaseall
 	end
+
+VermilionCity_Gym_EventScript_LtSurgePostBattle::
+    msgbox VermilionCity_Gym_Text_LtSurgePostBattle
+    release
+    end
 
 VermilionCity_Gym_Text_LtSurgeIntro::
 	.string "Hey, kid! What do you think you're\n"
@@ -418,4 +475,38 @@ VermilionCity_Gym_Text_OnlyTrashLocksWereReset::
 	.string "There's only trash here.\p"
 	.string "Hey!\n"
 	.string "The electric locks were reset!$"
+
+VermilionCity_Gym_Text_RulesExplain::
+    .string "But listen up, rookie!\n"
+    .string "This is a battlefield!\p"
+    .string "Gym battles require challengers\n"
+    .string "use the same amount of Pokemon.\p"
+    .string "I don't waste my time on\n"
+    .string "undisciplined squads.\p"
+    .string "Do you want to access the Storage\n"
+    .string "System to organize your unit?$"
+
+VermilionCity_Gym_Text_Refused::
+    .string "Dismissed!\p"
+    .string "Come back when you learn to\n"
+    .string "follow orders!$"
+
+VermilionCity_Gym_Text_StillNot5::
+    .string "Maggot!\p"
+    .string "You still don't have exactly\n"
+    .string "five Pokémon!\p"
+    .string "This is insubordination!\n"
+    .string "Get out of my face!$"
+
+VermilionCity_Gym_Text_OfferPCRetrieve::
+    .string "You've earned my respect, soldier.\p"
+    .string "Do you want to access the Storage\n"
+    .string "System to retrieve your team?$"
+
+VermilionCity_Gym_Text_LtSurgeReady::
+    .string "At ease!\n"
+    .string "You've organized your squad.\p"
+    .string "Now, prepare to feel the voltage!\n"
+    .string "Ten-hut!{PLAY_BGM}{MUS_RG_ENCOUNTER_GYM_LEADER}$"
+
 
