@@ -94,6 +94,7 @@ enum ItemEffectType
     ITEM_EFFECT_PP_UP,
     ITEM_EFFECT_PP_MAX,
     ITEM_EFFECT_HEAL_PP,
+    ITEM_EFFECT_HEXORB, // hexorb branch
     ITEM_EFFECT_NONE
 };
 
