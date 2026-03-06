@@ -11,6 +11,7 @@
 #include "dexnav.h"
 #include "event_data.h"
 #include "event_object_movement.h"
+#include "nuzlocke.h"
 #include "event_scripts.h"
 #include "fake_rtc.h"
 #include "field_camera.h"
@@ -391,6 +392,9 @@ void DoWhiteOut(void)
 {
     RunScriptImmediately(EventScript_WhiteOut);
     HealPlayerParty();
+    // Handle Nuzlocke whiteout - mark all party Pokemon as dead
+    if (IsNuzlockeActive())
+        NuzlockeHandleWhiteout();
     Overworld_ResetStateAfterWhiteOut();
     SetWarpDestinationToLastHealLocation();
     WarpIntoMap();

@@ -19,6 +19,11 @@ extern const u8 gText_ExpandedPlaceholder_May[];
 extern const u8 gText_ExpandedPlaceholder_Red[];
 extern const u8 gText_ExpandedPlaceholder_Green[];
 
+// Nuzlocke strings
+extern const u8 gText_NuzlockeFirstEncounter[];
+extern const u8 gText_NuzlockeDuplicate[];
+extern const u8 gText_NuzlockeShiny[];
+
 extern const u8 gText_Lv50[];
 extern const u8 gText_OpenLevel[];
 
@@ -2212,9 +2217,13 @@ extern const u8 gText_Volcanobadge[];
 extern const u8 gText_Earthbadge[];
 extern const u8 gText_OakImportantToGetToKnowPokemonThroughly[];
 extern const u8 gText_OakThisIsListOfPokemon[];
+extern const u8 gText_OakSpeech_NuzlockeChallenge[];
+extern const u8 gText_OakSpeech_NoNuzlocke[];
+extern const u8 gText_OakSpeech_YesNuzlocke[];
+extern const u8 gText_OakSpeech_Farewell[];
 
-extern const u8 gText_Boy[];
-extern const u8 gText_Girl[];
+extern const u8 gText_Masculine[];
+extern const u8 gText_Feminine[];
 
 
 #endif // GUARD_STRINGS_H

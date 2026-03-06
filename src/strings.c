@@ -41,8 +41,8 @@ ALIGNED(4) const u8 gText_NextBack[] = _("{A_BUTTON}NEXT {B_BUTTON}BACK");
 ALIGNED(4) const u8 gText_PickNextCancel[] = _("{DPAD_UPDOWN}PICK {A_BUTTON}NEXT {B_BUTTON}CANCEL");
 ALIGNED(4) const u8 gText_PickCancel[] = _("{DPAD_UPDOWN}PICK {A_BUTTON}{B_BUTTON}CANCEL");
 ALIGNED(4) const u8 gText_AButtonExit[] = _("{A_BUTTON}EXIT");
-const u8 gText_Boy[] = _("BOY");
-const u8 gText_Girl[] = _("GIRL");
+const u8 gText_Masculine[] = _("MASCULINE");
+const u8 gText_Feminine[] = _("FEMININE");
 const u8 gText_ThisIsAPokemon[] = _("This is what we call a “POKéMON.”{PAUSE 96}\p");
 const u8 gText_5MarksPokemon[] = _("????? POKéMON");
 const u8 gText_UnkHeight[] = _("{CLEAR_TO 0x0C}??'??”");
@@ -174,6 +174,11 @@ const u8 gText_TheBattle[] = _("the battle");
 const u8 gText_ThePokemonList[] = _("the POKéMON LIST");
 const u8 gText_TheShop[] = _("the shop");
 const u8 gText_ThePC[] = _("the PC");
+// Nuzlocke strings
+const u8 gText_NuzlockeFirstEncounter[] = _("Alright, here's the first POKéMON\nof the area. Better make it count!\p");
+const u8 gText_NuzlockeDuplicate[] = _("We've already caught this POKéMON.\pThe Duplicate Clause lets us try\nfor another after this battle.\p");
+const u8 gText_NuzlockeShiny[] = _("Oh wow, a Shiny!\pThe Shiny Clause lets us try to\ncatch this no matter what!\p");
+// Infinite Repel
 const u8 gText_InfiniteRepelOn[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}Repel");
 const u8 gText_InfiniteRepelOff[] = _("{COLOR RED}{SHADOW LIGHT_RED}Repel");
 
