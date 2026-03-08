@@ -173,6 +173,18 @@ enum ContestCategories
 
 #define MAX_STAMP_CARD_STAMPS 7
 
+//Birch Start
+//Needed for VAR_STARTER_MON
+//passing to monchoicedata
+//for birch case upgrade
+enum StarterIds
+{
+    GRASS_STARTER,
+    FIRE_STARTER,
+    WATER_STARTER,
+};
+//Birch End
+
 enum Gender
 {
     MALE,

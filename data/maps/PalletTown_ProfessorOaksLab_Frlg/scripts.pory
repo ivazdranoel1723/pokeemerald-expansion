@@ -1239,6 +1239,13 @@ PalletTown_ProfessorOaksLab_EventScript_LastPokeBall::
 	release
 	end
 
+PalletTown_ProfessorOaksLab_EventScript_Birchs_Bag::
+    lockall
+    callnative StartNewPokeballCaseUI
+    waitstate
+    releaseall
+    return
+
 PalletTown_ProfessorOaksLab_EventScript_Aide1::
 	lock
 	faceplayer

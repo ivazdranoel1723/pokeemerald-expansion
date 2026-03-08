@@ -29,6 +29,15 @@
 #include "constants/abilities.h"
 #include "constants/items.h"
 #include "constants/battle_frontier.h"
+#include "constants/abilities.h"
+#include "wild_encounter.h"
+#include "pokemon.h" /* if not already included */
+
+u8 PickWildMonNature(u32 species);
+void CreateMonWithGenderNatureLetter(struct Pokemon *mon, u16 species, u8 level, u8 iv, u8 gender, u8 nature, u8 letter);
+void CreateMonWithNature(struct Pokemon *mon, u16 species, u8 level, u8 nature);
+u32 GetFormChangeTargetSpecies(struct Pokemon *mon, enum FormChanges method);
+
 
 static void CB2_ReturnFromChooseHalfParty(void);
 static void CB2_ReturnFromChooseBattleFrontierParty(void);
@@ -614,6 +623,167 @@ void ScrCmd_createmon(struct ScriptContext *ctx)
 }
 
 #undef PARSE_FLAG
+
+u32 BirchCase_GiveMonParameterized(u16 species, u8 level, u16 item, u8 ball, u8 nature, u8 abilityNum, u8 gender, u8 *evs, u8 *ivs, u16 *moves, bool8 ggMaxFactor, u8 teraType, bool8 isShinyExpansion)
+{
+    //
+    //  This function is created by Lunos and Ghoulslash as part of the custom givemon script in Expansion. I had to port it and rename it so that - 
+    //  I could have it working in pokeemerald and Expansion with #ifdefs without clashing with any changes Expansion makes to the old one
+    u16 nationalDexNum;
+    int sentToPc;
+    struct Pokemon mon;
+    u32 i;
+    u8 genderRatio = gSpeciesInfo[species].genderRatio;
+    u16 targetSpecies;
+
+    // check whether to use a specific nature or a random one
+    if (nature >= NUM_NATURES)
+    {
+#ifdef POKEMON_EXPANSION
+        if (OW_SYNCHRONIZE_NATURE >= GEN_6
+         && (gSpeciesInfo[species].eggGroups[0] == EGG_GROUP_NO_EGGS_DISCOVERED || OW_SYNCHRONIZE_NATURE == GEN_7))
+            nature = GetSynchronizedNature(STATIC_WILDMON_ORIGIN, species);
+        else
+            nature = Random() % NUM_NATURES;
+#else
+        if ((gSpeciesInfo[species].eggGroups[0] == EGG_GROUP_NO_EGGS_DISCOVERED))
+                nature = GetSynchronizedNature(STATIC_WILDMON_ORIGIN, species);
+            else
+                nature = Random() % NUM_NATURES;
+#endif
+    }
+{
+    // Personality that encodes gender + nature
+u32 personality = GetMonPersonality(species, gender, nature, RANDOM_UNOWN_LETTER);
+
+CreateMon(
+    &mon,
+    species,
+    level,
+    personality,
+    (struct OriginalTrainerId){
+        .method = OT_ID_PLAYER_ID,
+        .value = 0
+    }
+);
+    // Create the mon using the new 1.15 API
+    CreateMon(&mon, species, level, personality, OTID_STRUCT_PLAYER_ID);
+
+    // Mimic the old fixedIV = 32 behavior
+    u8 fixedIv = 32;
+    SetMonData(&mon, MON_DATA_HP_IV, &fixedIv);
+    SetMonData(&mon, MON_DATA_ATK_IV, &fixedIv);
+    SetMonData(&mon, MON_DATA_DEF_IV, &fixedIv);
+    SetMonData(&mon, MON_DATA_SPEED_IV, &fixedIv);
+    SetMonData(&mon, MON_DATA_SPATK_IV, &fixedIv);
+    SetMonData(&mon, MON_DATA_SPDEF_IV, &fixedIv);
+
+    CalculateMonStats(&mon);
+    GiveMonInitialMoveset(&mon);
+}
+    
+#ifdef POKEMON_EXPANSION // the Expansion shiny code doesn't work in vanilla
+    // shininess
+    if (P_FLAG_FORCE_SHINY != 0 && FlagGet(P_FLAG_FORCE_SHINY))
+        isShinyExpansion = TRUE;
+    else if (P_FLAG_FORCE_NO_SHINY != 0 && FlagGet(P_FLAG_FORCE_NO_SHINY))
+        isShinyExpansion = FALSE;
+    SetMonData(&mon, MON_DATA_IS_SHINY, &isShinyExpansion);
+
+    // gigantamax factor
+    SetMonData(&mon, MON_DATA_GIGANTAMAX_FACTOR, &ggMaxFactor);
+
+    // tera type
+    if (teraType >= NUMBER_OF_MON_TYPES)
+        teraType = gSpeciesInfo[species].types[0];
+    SetMonData(&mon, MON_DATA_TERA_TYPE, &teraType);
+#endif
+
+    // EV and IV
+    for (i = 0; i < NUM_STATS; i++)
+    {
+        // EV
+        if (evs[i] <= MAX_PER_STAT_EVS)
+            SetMonData(&mon, MON_DATA_HP_EV + i, &evs[i]);
+
+        // IV
+        if (ivs[i] <= MAX_PER_STAT_IVS)
+            SetMonData(&mon, MON_DATA_HP_IV + i, &ivs[i]);
+    }
+    CalculateMonStats(&mon);
+
+    // moves
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        if (moves[i] == MOVE_NONE || moves[i] >= MOVES_COUNT)
+            continue;
+        SetMonMoveSlot(&mon, moves[i], i);
+    }
+
+    // ability
+    if (abilityNum == NUM_ABILITY_PERSONALITY)
+    {
+        abilityNum = GetMonData(&mon, MON_DATA_PERSONALITY) & 1;
+    }
+    else if (abilityNum > NUM_NORMAL_ABILITY_SLOTS || GetAbilityBySpecies(species, abilityNum) == ABILITY_NONE)
+    {
+        do {
+            abilityNum = Random() % NUM_ABILITY_SLOTS; // includes hidden abilities
+        } while (GetAbilityBySpecies(species, abilityNum) == ABILITY_NONE);
+    }
+    SetMonData(&mon, MON_DATA_ABILITY_NUM, &abilityNum);
+
+    // ball
+    if (ball >= POKEBALL_COUNT)
+        ball = BALL_POKE;
+    SetMonData(&mon, MON_DATA_POKEBALL, &ball);
+
+    // held item
+    SetMonData(&mon, MON_DATA_HELD_ITEM, &item);
+
+#ifdef POKEMON_EXPANSION
+    // In case a mon with a form changing item is given. Eg: SPECIES_ARCEUS_NORMAL with ITEM_SPLASH_PLATE will transform into SPECIES_ARCEUS_WATER upon gifted.
+    targetSpecies = GetFormChangeTargetSpecies(&mon, FORM_CHANGE_ITEM_HOLD);
+    if (targetSpecies != SPECIES_NONE)
+        SetMonData(&mon, MON_DATA_SPECIES, &targetSpecies);
+#endif
+
+    // assign OT name and gender
+    SetMonData(&mon, MON_DATA_OT_NAME, gSaveBlock2Ptr->playerName);
+    SetMonData(&mon, MON_DATA_OT_GENDER, &gSaveBlock2Ptr->playerGender);
+
+    // find empty party slot to decide whether the Pokémon goes to the Player's party or the storage system.
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) == SPECIES_NONE)
+            break;
+    }
+    if (i >= PARTY_SIZE)
+    {
+        sentToPc = CopyMonToPC(&mon);
+    }
+    else
+    {
+        sentToPc = MON_GIVEN_TO_PARTY;
+        CopyMon(&gPlayerParty[i], &mon, sizeof(mon));
+        gPlayerPartyCount = i + 1;
+    }
+
+    // set pokédex flags
+    nationalDexNum = SpeciesToNationalPokedexNum(species); 
+    switch (sentToPc)
+    {
+    case MON_GIVEN_TO_PARTY:
+    case MON_GIVEN_TO_PC:
+        GetSetPokedexFlag(nationalDexNum, FLAG_SET_SEEN);
+        GetSetPokedexFlag(nationalDexNum, FLAG_SET_CAUGHT);
+        break;
+    case MON_CANT_GIVE:
+        break;
+    }
+
+    return sentToPc;
+}
 
 void Script_GetChosenMonOffensiveEVs(void)
 {
