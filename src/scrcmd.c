@@ -612,6 +612,23 @@ bool8 ScrCmd_subvar(struct ScriptContext *ctx)
     return FALSE;
 }
 
+bool8 ScrCmd_advancetime(struct ScriptContext *ctx)
+{
+    u16 time = ScriptReadHalfword(ctx);
+
+    switch (time)
+    {
+        case 0: // Day
+            FakeRtc_ForwardTimeTo(10, 0, 0);
+            break;
+        case 1: // Night
+            FakeRtc_ForwardTimeTo(20, 0, 0);
+            break;
+    }
+
+    return FALSE;
+}
+
 bool8 ScrCmd_random(struct ScriptContext *ctx)
 {
     u16 max = VarGet(ScriptReadHalfword(ctx));

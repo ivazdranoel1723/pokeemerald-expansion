@@ -58,6 +58,7 @@ enum
 {
     MENU_ACTION_POKEVIAL,
     MENU_ACTION_PC,
+    MENU_ACTION_TIME_CHANGER,
     MENU_ACTION_INFINITE_REPEL_ON,
     MENU_ACTION_INFINITE_REPEL_OFF,
     MENU_ACTION_AUTO_RUN_ON,
@@ -83,6 +84,7 @@ static bool8 LMenuPCCallback(void);
 static bool8 LMenuPlayerNameCallback(void);
 static bool8 LMenuAutoRunCallback(void);
 static bool8 LMenuFollowersCallback(void);
+static bool8 LMenuTimeChangerCallback(void);
 static bool8 LMenuInfiniteRepelCallback(void);
 static bool8 LMenuPokeVialCallback(void);
 
@@ -107,6 +109,7 @@ static const struct MenuAction sLMenuItems[] =
 {
     [MENU_ACTION_POKEVIAL]              = {gText_MenuPokeVial, {.u8_void = LMenuPokeVialCallback}},
     [MENU_ACTION_PC]                    = {gText_MenuPC, {.u8_void = LMenuPCCallback}},
+    [MENU_ACTION_TIME_CHANGER]          = {gText_TimeChanger,  {.u8_void = LMenuTimeChangerCallback}},
     [MENU_ACTION_INFINITE_REPEL_ON]     = {gText_InfiniteRepelOn,  {.u8_void = LMenuInfiniteRepelCallback}},
     [MENU_ACTION_INFINITE_REPEL_OFF]    = {gText_InfiniteRepelOff,  {.u8_void = LMenuInfiniteRepelCallback}},
     [MENU_ACTION_AUTO_RUN_ON]           = {gText_AutoRunOn,  {.u8_void = LMenuAutoRunCallback}},
@@ -132,6 +135,7 @@ static void HideLMenuWindow(void);
 static void HideLMenuWindowPC(void);
 static void HideLMenuWindowAutoRun(void);
 static void HideLMenuWindowFollowers(void);
+static void HideLMenuWindowTimeChanger(void);
 static void HideLMenuWindowInfiniteRepel(void);
 static void HideLMenuWindowPokeVial(void);
 static void ShowTimeWindow(void);
@@ -185,6 +189,7 @@ static void BuildNormalLMenu(void)
     {
         AddLMenuAction(MENU_ACTION_POKEVIAL);
         AddLMenuAction(MENU_ACTION_PC);
+        AddLMenuAction(MENU_ACTION_TIME_CHANGER);
     }
 
     if (FlagGet(OW_FLAG_NO_ENCOUNTER))
@@ -208,6 +213,7 @@ static void BuildNormalLMenu(void)
             AddLMenuAction(MENU_ACTION_AUTO_RUN_OFF);
     }
 }
+
 
 static void BuildSafariZoneLMenu(void)
 {
@@ -224,6 +230,9 @@ static void BuildSafariZoneLMenu(void)
             AddLMenuAction(MENU_ACTION_FOLLOWERS_ON);
     }
 
+    if(FlagGet(FLAG_SYS_POKEMON_GET))
+        AddLMenuAction(MENU_ACTION_TIME_CHANGER);
+
     if (FlagGet(FLAG_SYS_B_DASH))
     {
         if (gSaveBlock2Ptr->autoRun)
@@ -239,6 +248,7 @@ static void BuildLinkModeLMenu(void)
     {
         AddLMenuAction(MENU_ACTION_POKEVIAL);
         AddLMenuAction(MENU_ACTION_PC);
+        AddLMenuAction(MENU_ACTION_TIME_CHANGER);
     }
 
     if (FlagGet(OW_FLAG_NO_ENCOUNTER))
@@ -269,6 +279,7 @@ static void BuildUnionRoomLMenu(void)
     {
         AddLMenuAction(MENU_ACTION_POKEVIAL);
         AddLMenuAction(MENU_ACTION_PC);
+        AddLMenuAction(MENU_ACTION_TIME_CHANGER);
     }
 
     if (FlagGet(OW_FLAG_NO_ENCOUNTER))
@@ -295,6 +306,9 @@ static void BuildUnionRoomLMenu(void)
 
 static void BuildBattlePikeLMenu(void)
 {
+    if (FlagGet(FLAG_SYS_POKEMON_GET))
+        AddLMenuAction(MENU_ACTION_TIME_CHANGER);
+    
     if (FlagGet(OW_FLAG_NO_ENCOUNTER))
         AddLMenuAction(MENU_ACTION_INFINITE_REPEL_ON);
     else
@@ -319,6 +333,9 @@ static void BuildBattlePikeLMenu(void)
 
 static void BuildBattlePyramidLMenu(void)
 {
+    if (FlagGet(FLAG_SYS_POKEMON_GET))
+        AddLMenuAction(MENU_ACTION_TIME_CHANGER);
+    
     if (FlagGet(OW_FLAG_NO_ENCOUNTER))
         AddLMenuAction(MENU_ACTION_INFINITE_REPEL_ON);
     else
@@ -343,6 +360,9 @@ static void BuildBattlePyramidLMenu(void)
 
 static void BuildMultiPartnerRoomLMenu(void)
 {
+    if (FlagGet(FLAG_SYS_POKEMON_GET))
+        AddLMenuAction(MENU_ACTION_TIME_CHANGER);
+    
     if (FlagGet(OW_FLAG_NO_ENCOUNTER))
         AddLMenuAction(MENU_ACTION_INFINITE_REPEL_ON);
     else
@@ -539,6 +559,8 @@ static bool8 ShouldCallbackFadeToBlack(void)
         return FALSE;
     if (gMenuCallback2 == LMenuFollowersCallback)
         return FALSE;
+    if(gMenuCallback2 == LMenuTimeChangerCallback)
+        return FALSE;
     if (gMenuCallback2 == LMenuInfiniteRepelCallback)
         return FALSE;
     if (gMenuCallback2 == LMenuPokeVialCallback)
@@ -627,6 +649,30 @@ static void HideLMenuWindowAutoRun(void)
             ScriptContext_SetupScript(EventScript_EnableAutoRun);
         }
     }
+}
+
+extern const u8 EventScript_TimeChanger[];
+static bool8 LMenuTimeChangerCallback(void)
+{
+    HideLMenuTimeChanger(); // Hide start menu
+    return TRUE;
+}
+
+void HideLMenuTimeChanger(void)
+{
+    PlaySE(SE_SELECT);
+    HideLMenuWindowTimeChanger();
+}
+
+static void HideLMenuWindowTimeChanger(void)
+{
+    ClearStdWindowAndFrame(GetLMenuWindowId(), TRUE);
+    RemoveLMenuWindow();
+    RemoveLMenuTimeWindow();
+    ScriptUnfreezeObjectEvents();
+    UnlockPlayerFieldControls();
+    PlaySE(SE_SELECT);
+    ScriptContext_SetupScript(EventScript_TimeChanger);
 }
 
 extern const u8 EventScript_DisableFollowers[];

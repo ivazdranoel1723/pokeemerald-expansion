@@ -1889,6 +1889,12 @@
 	.2byte \quantity
 	.endm
 
+	@ Advances time based on variable passed, 0 = Day, 1 = Night, 2 = Morning, 3 = Dusk
+	.macro advancetime time:req
+	.byte 0xe7
+	.2byte \time
+	.endm
+
 	.macro _dynmultichoice left:req, top:req, ignoreBPress:req, maxBeforeScroll:req, shouldSort:req, initialSelected:req, callbacks:req argv:vararg
 	.byte SCR_OP_DYNMULTICHOICE
 	.2byte \left

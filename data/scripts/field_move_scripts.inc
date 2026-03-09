@@ -503,6 +503,49 @@ EventScript_EndRockClimb::
 	releaseall
 	end
 
+EventScript_TimeChanger::
+    dynmultipush TimeChanger_Text_Day, 0
+    dynmultipush TimeChanger_Text_Night, 1
+    dynmultipush TimeChanger_Text_Exit, MULTI_B_PRESSED
+    dynmultistack 0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE
+    compare VAR_RESULT, MULTI_B_PRESSED
+    goto_if_eq EventScript_TimeChanger_Time_Unchanged
+    compare VAR_RESULT, 0
+    goto_if_eq EventScript_TimeChanger_ChangeTimeToDay
+    compare VAR_RESULT, 1
+    goto_if_eq EventScript_TimeChanger_ChangeTimeToNight
+	end
+
+EventScript_TimeChanger_Time_Unchanged:
+    end
+
+EventScript_TimeChanger_ChangeTimeToDay:
+    advancetime 0
+	dotimebasedevents
+    msgbox TimeChanger_Text_ItIsNowDay MSGBOX_SIGN
+    end
+
+EventScript_TimeChanger_ChangeTimeToNight:
+    advancetime 1
+	dotimebasedevents
+    msgbox TimeChanger_Text_ItIsNowNight MSGBOX_SIGN
+    end
+
+TimeChanger_Text_Day:
+	.string "Day$"
+
+TimeChanger_Text_Night:
+	.string "Night$"
+
+TimeChanger_Text_ItIsNowDay:
+	.string "Time set to 10:00 AM.$"
+
+TimeChanger_Text_ItIsNowNight:
+	.string "Time set to 8:00 PM.$"
+
+TimeChanger_Text_Exit:
+	.string "Cancel$"
+
 Text_WantToRockClimb:
 	.string "The cliff is steep.\n"
 	.string "Would you like to use Rock Climb?$"
