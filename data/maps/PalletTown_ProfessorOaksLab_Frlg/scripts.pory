@@ -799,7 +799,6 @@ PalletTown_ProfessorOaksLab_Movement_RivalExit::
 	step_end
 
 
-
 PalletTown_ProfessorOaksLab_EventScript_ReadyEndSignLadyScene::
 	setvar VAR_MAP_SCENE_PALLET_TOWN_SIGN_LADY, 1
 	return
@@ -807,39 +806,137 @@ PalletTown_ProfessorOaksLab_EventScript_ReadyEndSignLadyScene::
 
 PalletTown_ProfessorOaksLab_EventScript_Birchs_Bag::
     lockall
-	goto_if_set FLAG_SYS_POKEMON_GET, PalletTown_ProfessorOaksLab_EventScript_BirchsBag_AlreadyUsed
+    goto_if_set FLAG_SYS_POKEMON_GET, PalletTown_ProfessorOaksLab_EventScript_BirchsBag_AlreadyUsed
     callnative StartNewPokeballCaseUI
     waitstate
+    setvar PLAYER_STARTER_SPECIES, VAR_RESULT
+    compare PLAYER_STARTER_SPECIES, SPECIES_SQUIRTLE
+    goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedSquirtle
+    compare PLAYER_STARTER_SPECIES, SPECIES_MUDKIP
+    goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedMudkip
+    compare PLAYER_STARTER_SPECIES, SPECIES_TOTODILE
+    goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedTotodile
+    compare PLAYER_STARTER_SPECIES, SPECIES_CHARMANDER
+    goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedCharmander
+    compare PLAYER_STARTER_SPECIES, SPECIES_CYNDAQUIL
+    goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedCyndaquil
+    compare PLAYER_STARTER_SPECIES, SPECIES_TORCHIC
+    goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedTorchic
+    compare PLAYER_STARTER_SPECIES, SPECIES_BULBASAUR
+    goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedBulbasaur
+    compare PLAYER_STARTER_SPECIES, SPECIES_CHIKORITA
+    goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedChikorita
+    compare PLAYER_STARTER_SPECIES, SPECIES_TREECKO
+    goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedTreecko
+    releaseall
+
+PalletTown_ProfessorOaksLab_EventScript_ReceivedSquirtle::
+	setvar VAR_TEMP_1, SPECIES_SQUIRTLE
+    bufferspeciesname STR_VAR_1, VAR_TEMP_1
     msgbox PalletTown_ProfessorOaksLab_Text_OakThisMonIsEnergetic
     setflag FLAG_SYS_POKEMON_GET
     setflag FLAG_PALLET_LADY_NOT_BLOCKING_SIGN
     message PalletTown_ProfessorOaksLab_Text_ReceivedMonFromOak
     playfanfare MUS_RG_OBTAIN_KEY_ITEM
     waitfanfare
+	goto PalletTown_SetRivalBulbasaur
+	return
 
-    checkspecies SPECIES_CHARMANDER
-    goto_if_eq VAR_RESULT, TRUE, PalletTown_SetRivalSquirtle
-    checkspecies SPECIES_CYNDAQUIL
-    goto_if_eq VAR_RESULT, TRUE, PalletTown_SetRivalSquirtle
-    checkspecies SPECIES_TORCHIC
-    goto_if_eq VAR_RESULT, TRUE, PalletTown_SetRivalSquirtle
+PalletTown_ProfessorOaksLab_EventScript_ReceivedTotodile::
+	setvar VAR_TEMP_1, SPECIES_TOTODILE
+    bufferspeciesname STR_VAR_1, VAR_TEMP_1
+    msgbox PalletTown_ProfessorOaksLab_Text_OakThisMonIsEnergetic
+    setflag FLAG_SYS_POKEMON_GET
+    setflag FLAG_PALLET_LADY_NOT_BLOCKING_SIGN
+    message PalletTown_ProfessorOaksLab_Text_ReceivedMonFromOak
+    playfanfare MUS_RG_OBTAIN_KEY_ITEM
+    waitfanfare
+	goto PalletTown_SetRivalBulbasaur
+	return
 
-    checkspecies SPECIES_BULBASAUR
-    goto_if_eq VAR_RESULT, TRUE, PalletTown_SetRivalCharmander
-    checkspecies SPECIES_CHIKORITA
-    goto_if_eq VAR_RESULT, TRUE, PalletTown_SetRivalCharmander
-    checkspecies SPECIES_TREECKO
-    goto_if_eq VAR_RESULT, TRUE, PalletTown_SetRivalCharmander
+PalletTown_ProfessorOaksLab_EventScript_ReceivedMudkip::
+	setvar VAR_TEMP_1, SPECIES_MUDKIP
+    bufferspeciesname STR_VAR_1, VAR_TEMP_1
+    msgbox PalletTown_ProfessorOaksLab_Text_OakThisMonIsEnergetic
+    setflag FLAG_SYS_POKEMON_GET
+    setflag FLAG_PALLET_LADY_NOT_BLOCKING_SIGN
+    message PalletTown_ProfessorOaksLab_Text_ReceivedMonFromOak
+    playfanfare MUS_RG_OBTAIN_KEY_ITEM
+    waitfanfare
+	goto PalletTown_SetRivalBulbasaur
+	return
 
-    checkspecies SPECIES_SQUIRTLE
-    goto_if_eq VAR_RESULT, TRUE, PalletTown_SetRivalBulbasaur
-    checkspecies SPECIES_TOTODILE
-    goto_if_eq VAR_RESULT, TRUE, PalletTown_SetRivalBulbasaur
-    checkspecies SPECIES_MUDKIP
-    goto_if_eq VAR_RESULT, TRUE, PalletTown_SetRivalBulbasaur
+PalletTown_ProfessorOaksLab_EventScript_ReceivedCharmander::
+	setvar VAR_TEMP_1, SPECIES_CHARMANDER
+    bufferspeciesname STR_VAR_1, VAR_TEMP_1
+    msgbox PalletTown_ProfessorOaksLab_Text_OakThisMonIsEnergetic
+    setflag FLAG_SYS_POKEMON_GET
+    setflag FLAG_PALLET_LADY_NOT_BLOCKING_SIGN
+    message PalletTown_ProfessorOaksLab_Text_ReceivedMonFromOak
+    playfanfare MUS_RG_OBTAIN_KEY_ITEM
+    waitfanfare
+	goto PalletTown_SetRivalSquirtle
+	return
 
-    releaseall
-    return
+PalletTown_ProfessorOaksLab_EventScript_ReceivedCyndaquil::
+	setvar VAR_TEMP_1, SPECIES_CYNDAQUIL
+    bufferspeciesname STR_VAR_1, VAR_TEMP_1
+    msgbox PalletTown_ProfessorOaksLab_Text_OakThisMonIsEnergetic
+    setflag FLAG_SYS_POKEMON_GET
+    setflag FLAG_PALLET_LADY_NOT_BLOCKING_SIGN
+    message PalletTown_ProfessorOaksLab_Text_ReceivedMonFromOak
+    playfanfare MUS_RG_OBTAIN_KEY_ITEM
+    waitfanfare
+	goto PalletTown_SetRivalSquirtle
+	return
+
+PalletTown_ProfessorOaksLab_EventScript_ReceivedTorchic::
+	setvar VAR_TEMP_1, SPECIES_TORCHIC
+    bufferspeciesname STR_VAR_1, VAR_TEMP_1
+    msgbox PalletTown_ProfessorOaksLab_Text_OakThisMonIsEnergetic
+    setflag FLAG_SYS_POKEMON_GET
+    setflag FLAG_PALLET_LADY_NOT_BLOCKING_SIGN
+    message PalletTown_ProfessorOaksLab_Text_ReceivedMonFromOak
+    playfanfare MUS_RG_OBTAIN_KEY_ITEM
+    waitfanfare
+	goto PalletTown_SetRivalSquirtle
+	return
+
+PalletTown_ProfessorOaksLab_EventScript_ReceivedBulbasaur::
+	setvar VAR_TEMP_1, SPECIES_BULBASAUR
+    bufferspeciesname STR_VAR_1, VAR_TEMP_1
+    msgbox PalletTown_ProfessorOaksLab_Text_OakThisMonIsEnergetic
+    setflag FLAG_SYS_POKEMON_GET
+    setflag FLAG_PALLET_LADY_NOT_BLOCKING_SIGN
+    message PalletTown_ProfessorOaksLab_Text_ReceivedMonFromOak
+    playfanfare MUS_RG_OBTAIN_KEY_ITEM
+    waitfanfare
+	goto PalletTown_SetRivalCharmander
+	return
+
+PalletTown_ProfessorOaksLab_EventScript_ReceivedChikorita::
+	setvar VAR_TEMP_1, SPECIES_CHIKORITA
+    bufferspeciesname STR_VAR_1, VAR_TEMP_1
+    msgbox PalletTown_ProfessorOaksLab_Text_OakThisMonIsEnergetic
+    setflag FLAG_SYS_POKEMON_GET
+    setflag FLAG_PALLET_LADY_NOT_BLOCKING_SIGN
+    message PalletTown_ProfessorOaksLab_Text_ReceivedMonFromOak
+    playfanfare MUS_RG_OBTAIN_KEY_ITEM
+    waitfanfare
+	goto PalletTown_SetRivalCharmander
+	return
+
+PalletTown_ProfessorOaksLab_EventScript_ReceivedTreecko::
+    setvar VAR_TEMP_1, SPECIES_TREECKO
+	bufferspeciesname STR_VAR_1, SPECIES_TREECKO
+    msgbox PalletTown_ProfessorOaksLab_Text_OakThisMonIsEnergetic
+    setflag FLAG_SYS_POKEMON_GET
+    setflag FLAG_PALLET_LADY_NOT_BLOCKING_SIGN
+    message PalletTown_ProfessorOaksLab_Text_ReceivedMonFromOak
+    playfanfare MUS_RG_OBTAIN_KEY_ITEM
+    waitfanfare
+	goto PalletTown_SetRivalCharmander
+	return
 
 PalletTown_ProfessorOaksLab_EventScript_BirchsBag_AlreadyUsed::
     msgbox PalletTown_ProfessorOaksLab_Text_BirchsBagEmpty
@@ -849,59 +946,41 @@ PalletTown_ProfessorOaksLab_EventScript_BirchsBag_AlreadyUsed::
 PalletTown_SetRivalSquirtle::
     setvar RIVAL_STARTER_SPECIES, SPECIES_SQUIRTLE
     setvar VAR_STARTER_MON, 2
-    goto PalletTown_ProfessorOaksLab_EventScript_RivalPicksStarter
+    goto PalletTown_ProfessorOaksLab_EventScript_RivalWalksToBag
 
 PalletTown_SetRivalCharmander::
     setvar RIVAL_STARTER_SPECIES, SPECIES_CHARMANDER
     setvar VAR_STARTER_MON, 0
-    goto PalletTown_ProfessorOaksLab_EventScript_RivalPicksStarter
+    goto PalletTown_ProfessorOaksLab_EventScript_RivalWalksToBag
 
 PalletTown_SetRivalBulbasaur::
     setvar RIVAL_STARTER_SPECIES, SPECIES_BULBASAUR
     setvar VAR_STARTER_MON, 1
-    goto PalletTown_ProfessorOaksLab_EventScript_RivalPicksStarter
-
-PalletTown_SetStarterMon0::
-    setvar VAR_STARTER_MON, 0
-    return
-
-PalletTown_SetStarterMon1::
-    setvar VAR_STARTER_MON, 1
-    return
-
-PalletTown_SetStarterMon2::
-    setvar VAR_STARTER_MON, 2
-    return
-
-PalletTown_ProfessorOaksLab_EventScript_RivalPicksStarter::
-	closemessage
-	goto PalletTown_ProfessorOaksLab_EventScript_RivalWalksToBag
-	end
+    goto PalletTown_ProfessorOaksLab_EventScript_RivalWalksToBag
 
 PalletTown_ProfessorOaksLab_EventScript_RivalWalksToBag::
-	applymovement LOCALID_OAKS_LAB_RIVAL, PalletTown_ProfessorOaksLab_Movement_RivalWalksToBag
-	waitmovement 0
-	goto PalletTown_ProfessorOaksLab_EventScript_RivalTakesStarter
-	end
+    applymovement LOCALID_OAKS_LAB_RIVAL, PalletTown_ProfessorOaksLab_Movement_RivalWalksToBag
+    waitmovement 0
+    goto PalletTown_ProfessorOaksLab_EventScript_RivalReceivesStarter
 
 PalletTown_ProfessorOaksLab_Movement_RivalWalksToBag::
-	walk_right
     walk_right
-	step_end
+    walk_right
+    step_end
 
-PalletTown_ProfessorOaksLab_EventScript_RivalTakesStarter::
-	textcolor NPC_TEXT_COLOR_MALE
-	msgbox PalletTown_ProfessorOaksLab_Text_RivalIllTakeThisOneThen
-	textcolor NPC_TEXT_COLOR_NEUTRAL
-	bufferspeciesname STR_VAR_1, RIVAL_STARTER_SPECIES
-	message PalletTown_ProfessorOaksLab_Text_RivalReceivedMonFromOak
-	waitmessage
-	playfanfare MUS_RG_OBTAIN_KEY_ITEM
-	waitfanfare
-	setvar VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 3
-	call_if_set FLAG_OPENED_START_MENU, PalletTown_ProfessorOaksLab_EventScript_ReadyEndSignLadyScene
-	release
-	end
+PalletTown_ProfessorOaksLab_EventScript_RivalReceivesStarter::
+    textcolor NPC_TEXT_COLOR_MALE
+    msgbox PalletTown_ProfessorOaksLab_Text_RivalIllTakeThisOneThen
+    textcolor NPC_TEXT_COLOR_NEUTRAL
+    bufferspeciesname STR_VAR_1, RIVAL_STARTER_SPECIES
+    message PalletTown_ProfessorOaksLab_Text_RivalReceivedMonFromOak
+    waitmessage
+    playfanfare MUS_RG_OBTAIN_KEY_ITEM
+    waitfanfare
+    setvar VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 3
+    call_if_set FLAG_OPENED_START_MENU, PalletTown_ProfessorOaksLab_EventScript_ReadyEndSignLadyScene
+    releaseall
+    end
 
 PalletTown_ProfessorOaksLab_EventScript_RivalBattleTriggerLeft::
 	lockall
@@ -920,7 +999,6 @@ PalletTown_ProfessorOaksLab_EventScript_RivalBattleTriggerRight::
 	setvar VAR_TEMP_2, 3
 	goto PalletTown_ProfessorOaksLab_EventScript_RivalBattle
 	end
-
 
 PalletTown_ProfessorOaksLab_EventScript_EndRivalBattle::
 	special HealPlayerParty
