@@ -810,24 +810,25 @@ PalletTown_ProfessorOaksLab_EventScript_Birchs_Bag::
     callnative StartNewPokeballCaseUI
     waitstate
     setvar PLAYER_STARTER_SPECIES, VAR_RESULT
-    compare PLAYER_STARTER_SPECIES, SPECIES_SQUIRTLE
-    goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedSquirtle
-    compare PLAYER_STARTER_SPECIES, SPECIES_MUDKIP
-    goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedMudkip
-    compare PLAYER_STARTER_SPECIES, SPECIES_TOTODILE
-    goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedTotodile
-    compare PLAYER_STARTER_SPECIES, SPECIES_CHARMANDER
-    goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedCharmander
-    compare PLAYER_STARTER_SPECIES, SPECIES_CYNDAQUIL
-    goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedCyndaquil
-    compare PLAYER_STARTER_SPECIES, SPECIES_TORCHIC
-    goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedTorchic
-    compare PLAYER_STARTER_SPECIES, SPECIES_BULBASAUR
-    goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedBulbasaur
-    compare PLAYER_STARTER_SPECIES, SPECIES_CHIKORITA
-    goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedChikorita
-    compare PLAYER_STARTER_SPECIES, SPECIES_TREECKO
-    goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedTreecko
+	compare PLAYER_STARTER_SPECIES, 0
+	goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedMudkip
+	compare PLAYER_STARTER_SPECIES, 1
+	goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedTreecko
+	compare PLAYER_STARTER_SPECIES, 2
+	goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedTorchic
+	compare PLAYER_STARTER_SPECIES, 3
+	goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedChikorita
+	compare PLAYER_STARTER_SPECIES, 4
+	goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedTotodile
+	compare PLAYER_STARTER_SPECIES, 5
+	goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedCyndaquil
+	compare PLAYER_STARTER_SPECIES, 6
+	goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedBulbasaur
+	compare PLAYER_STARTER_SPECIES, 7
+	goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedCharmander
+	compare PLAYER_STARTER_SPECIES, 8
+	goto_if_eq VAR_RESULT, PalletTown_ProfessorOaksLab_EventScript_ReceivedSquirtle
+
     releaseall
 
 PalletTown_ProfessorOaksLab_EventScript_ReceivedSquirtle::
