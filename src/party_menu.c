@@ -114,6 +114,7 @@ enum {
     MENU_CATALOG_FRIDGE,
     MENU_CATALOG_FAN,
     MENU_CATALOG_MOWER,
+    MENU_CATALOG_STEREO,
     MENU_CHANGE_FORM,
     MENU_CHANGE_ABILITY,
         // Start hexorb Branch
@@ -499,6 +500,7 @@ static void CursorCb_CatalogWashing(u8);
 static void CursorCb_CatalogFridge(u8);
 static void CursorCb_CatalogFan(u8);
 static void CursorCb_CatalogMower(u8);
+static void CursorCb_CatalogStereo(u8);
 static void CursorCb_ChangeForm(u8);
 static void CursorCb_ChangeAbility(u8);
 void TryItemHoldFormChange(struct Pokemon *mon, s8 slotId);
@@ -6863,6 +6865,13 @@ static void CursorCb_CatalogMower(u8 taskId)
 {
     gSpecialVar_Result = 5;
     gSpecialVar_0x8000 = ROTOM_MOW_MOVE;
+    TryMultichoiceFormChange(taskId);
+}
+
+static void CursorCb_CatalogStereo(u8 taskId)
+{
+    gSpecialVar_Result = 6;
+    gSpecialVar_0x8000 = ROTOM_SOUND_MOVE;
     TryMultichoiceFormChange(taskId);
 }
 

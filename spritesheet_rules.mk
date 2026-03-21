@@ -4631,6 +4631,9 @@ $(POKEMONGFXDIR)/rotom/fan/overworld.4bpp: %.4bpp: %.png
 $(POKEMONGFXDIR)/rotom/mow/overworld.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -mwidth 4 -mheight 4
 
+$(POKEMONGFXDIR)/rotom/sound/overworld.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 4 -mheight 4
+
 $(POKEMONGFXDIR)/giratina/origin/overworld.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -mwidth 8 -mheight 8
 

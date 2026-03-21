@@ -1601,34 +1601,34 @@
 #define SPECIES_VENUSAUR_GMAX                           1489
 #define SPECIES_BLASTOISE_GMAX                          1490
 #define SPECIES_CHARIZARD_GMAX                          1491
-#define SPECIES_BUTTERFREE_GMAX                         1492
+#define SPECIES_BUTTERFREE_MEGA                         1492
 #define SPECIES_PIKACHU_GMAX                            1493
 #define SPECIES_MEOWTH_GMAX                             1494
-#define SPECIES_MACHAMP_GMAX                            1495
+#define SPECIES_MACHAMP_MEGA                            1495
 #define SPECIES_GENGAR_GMAX                             1496
-#define SPECIES_KINGLER_GMAX                            1497
-#define SPECIES_LAPRAS_GMAX                             1498
+#define SPECIES_KINGLER_MEGA                            1497
+#define SPECIES_LAPRAS_MEGA                             1498
 #define SPECIES_EEVEE_GMAX                              1499
-#define SPECIES_SNORLAX_GMAX                            1500
-#define SPECIES_GARBODOR_GMAX                           1501
+#define SPECIES_SNORLAX_MEGA                           1500
+#define SPECIES_GARBODOR_MEGA                           1501
 #define SPECIES_MELMETAL_GMAX                           1502
 #define SPECIES_RILLABOOM_GMAX                          1503
 #define SPECIES_CINDERACE_GMAX                          1504
 #define SPECIES_INTELEON_GMAX                           1505
 #define SPECIES_CORVIKNIGHT_GMAX                        1506
-#define SPECIES_ORBEETLE_GMAX                           1507
-#define SPECIES_DREDNAW_GMAX                            1508
-#define SPECIES_COALOSSAL_GMAX                          1509
-#define SPECIES_FLAPPLE_GMAX                            1510
-#define SPECIES_APPLETUN_GMAX                           1511
-#define SPECIES_SANDACONDA_GMAX                         1512
-#define SPECIES_TOXTRICITY_AMPED_GMAX                   1513
+#define SPECIES_ORBEETLE_MEGA                          1507
+#define SPECIES_DREDNAW_MEGA                           1508
+#define SPECIES_COALOSSAL_MEGA                         1509
+#define SPECIES_FLAPPLE_MEGA                           1510
+#define SPECIES_APPLETUN_MEGA                           1511
+#define SPECIES_SANDACONDA_MEGA                       1512
+#define SPECIES_TOXTRICITY_MEGA                       1513
 #define SPECIES_TOXTRICITY_LOW_KEY_GMAX                 1514
-#define SPECIES_CENTISKORCH_GMAX                        1515
+#define SPECIES_CENTISKORCH_MEGA                       1515
 #define SPECIES_HATTERENE_GMAX                          1516
-#define SPECIES_GRIMMSNARL_GMAX                         1517
+#define SPECIES_GRIMMSNARL_MEGA                         1517
 #define SPECIES_ALCREMIE_GMAX                           1518
-#define SPECIES_COPPERAJAH_GMAX                         1519
+#define SPECIES_COPPERAJAH_MEGA                         1519
 #define SPECIES_DURALUDON_GMAX                          1520
 #define SPECIES_URSHIFU_SINGLE_STRIKE_GMAX              1521
 #define SPECIES_URSHIFU_GMAX                            SPECIES_URSHIFU_SINGLE_STRIKE_GMAX
@@ -1687,8 +1687,9 @@
 #define SPECIES_TATSUGIRI_DROOPY_MEGA                   1570
 #define SPECIES_TATSUGIRI_STRETCHY_MEGA                 1571
 #define SPECIES_GLIMMORA_MEGA                           1572
+#define SPECIES_ROTOM_SOUND                             1573
 
-#define SPECIES_EGG                                     (SPECIES_GLIMMORA_MEGA + 1)
+#define SPECIES_EGG                                     (SPECIES_ROTOM_SOUND + 1)
 
 #define NUM_SPECIES SPECIES_EGG
 

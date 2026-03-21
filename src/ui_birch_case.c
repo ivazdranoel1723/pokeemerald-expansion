@@ -46,6 +46,9 @@
 #include "constants/pokemon.h"
 #include "naming_screen.h"
 #include "tv.h"
+#include "constants/flags.h"
+#include "constants/flags_frlg.h"
+#include "constants/vars.h"
 
  /*
     9 Starter Selection Birch Case
@@ -140,19 +143,38 @@ struct MonChoiceData{ // This is the format used to define a mon, everything lef
 //of storing grass starter fire starter or water starter
 //Id value to VAR_STARTER_MON
 //needed for rival to have right pick etc.
+
+void SetStarterBallFlag(u8 ballChoice)
+{
+    switch (ballChoice)
+    {
+    case BALL_TOP_FIRST:        FlagSet(FLAG_CHOSE_MUDKIP_BALL);     break;
+    case BALL_TOP_SECOND:       FlagSet(FLAG_CHOSE_TREECKO_BALL);    break;
+    case BALL_MIDDLE_FIRST:     FlagSet(FLAG_CHOSE_TORCHIC_BALL);    break;
+    case BALL_TOP_THIRD:        FlagSet(FLAG_CHOSE_CHIKORITA_BALL);  break;
+    case BALL_TOP_FOURTH:       FlagSet(FLAG_CHOSE_TOTODILE_BALL);   break;
+    case BALL_MIDDLE_THIRD:     FlagSet(FLAG_CHOSE_CYNDAQUIL_BALL);  break;
+    case BALL_MIDDLE_SECOND:    FlagSet(FLAG_CHOSE_BULBASAUR_BALL);  break;
+    case BALL_BOTTOM_FIRST:     FlagSet(FLAG_CHOSE_CHARMANDER_BALL); break;
+    case BALL_BOTTOM_SECOND:    FlagSet(FLAG_CHOSE_SQUIRTLE_BALL);   break;
+    default: break;
+    }
+}
+
+
 static const struct MonChoiceData sStarterChoices[9] = 
 {
-    [BALL_TOP_FIRST]        = {SPECIES_MUDKIP, 5, WATER_STARTER},
-    [BALL_TOP_SECOND]       = {SPECIES_TREECKO, 5, GRASS_STARTER},
-    [BALL_MIDDLE_FIRST]     = {SPECIES_TORCHIC, 5, FIRE_STARTER},
+    [BALL_TOP_FIRST]        = {SPECIES_MUDKIP, 5, STARTER_MUDKIP},
+    [BALL_TOP_SECOND]       = {SPECIES_TREECKO, 5, STARTER_TREECKO},
+    [BALL_MIDDLE_FIRST]     = {SPECIES_TORCHIC, 5, STARTER_TORCHIC},
 
-    [BALL_TOP_THIRD]        = {SPECIES_CHIKORITA, 5, GRASS_STARTER},
-    [BALL_TOP_FOURTH]       = {SPECIES_TOTODILE, 5, WATER_STARTER},
-    [BALL_MIDDLE_THIRD]     = {SPECIES_CYNDAQUIL, 5, FIRE_STARTER},
+    [BALL_TOP_THIRD]        = {SPECIES_CHIKORITA, 5, STARTER_CHIKORITA},
+    [BALL_TOP_FOURTH]       = {SPECIES_TOTODILE, 5, STARTER_TOTODILE},
+    [BALL_MIDDLE_THIRD]     = {SPECIES_CYNDAQUIL, 5, STARTER_CYNDAQUIL},
 
-    [BALL_MIDDLE_SECOND]    = {SPECIES_BULBASAUR, 5, GRASS_STARTER},
-    [BALL_BOTTOM_FIRST]     = {SPECIES_CHARMANDER, 5, FIRE_STARTER},
-    [BALL_BOTTOM_SECOND]    = {SPECIES_SQUIRTLE, 5, WATER_STARTER},
+    [BALL_MIDDLE_SECOND]    = {SPECIES_BULBASAUR, 5, STARTER_BULBASAUR},
+    [BALL_BOTTOM_FIRST]     = {SPECIES_CHARMANDER, 5, STARTER_CHARMANDER},
+    [BALL_BOTTOM_SECOND]    = {SPECIES_SQUIRTLE, 5, STARTER_SQUIRTLE},
 };
 
 //==========EWRAM==========//
@@ -473,40 +495,156 @@ static void ChangePositionUpdateSpriteAnims(u16 oldPosition, u8 taskId) // turn 
 //givemon result is just for
 //if mon went to pc party etc.
 //not relevant for starter selection
-static void BirchCase_GiveMon() // Function that calls the GiveMon function pulled from Expansion by Lunos and Ghoulslash
+static void BirchCase_GiveMon(void)
 {
-    u8 *evs = (u8 *) sStarterChoices[sBirchCaseDataPtr->handPosition].evs;
-    u8 *ivs = (u8 *) sStarterChoices[sBirchCaseDataPtr->handPosition].ivs;
-    u16 *moves = (u16 *) sStarterChoices[sBirchCaseDataPtr->handPosition].moves;
+    u8 *evs = (u8 *)sStarterChoices[sBirchCaseDataPtr->handPosition].evs;
+    u8 *ivs = (u8 *)sStarterChoices[sBirchCaseDataPtr->handPosition].ivs;
+    u16 *moves = (u16 *)sStarterChoices[sBirchCaseDataPtr->handPosition].moves;
+
     FlagSet(FLAG_SYS_POKEMON_GET);
-    gSpecialVar_Result = BirchCase_GiveMonParameterized(sStarterChoices[sBirchCaseDataPtr->handPosition].species, sStarterChoices[sBirchCaseDataPtr->handPosition].level, \
-                sStarterChoices[sBirchCaseDataPtr->handPosition].item, sStarterChoices[sBirchCaseDataPtr->handPosition].ball, \
-                sStarterChoices[sBirchCaseDataPtr->handPosition].nature, sStarterChoices[sBirchCaseDataPtr->handPosition].abilityNum, \
-                sStarterChoices[sBirchCaseDataPtr->handPosition].gender, evs, ivs, moves, \
-                sStarterChoices[sBirchCaseDataPtr->handPosition].ggMaxFactor, sStarterChoices[sBirchCaseDataPtr->handPosition].teraType,\
-                sStarterChoices[sBirchCaseDataPtr->handPosition].isShinyExpansion);
+
+    gSpecialVar_Result = BirchCase_GiveMonParameterized(
+        sStarterChoices[sBirchCaseDataPtr->handPosition].species,
+        sStarterChoices[sBirchCaseDataPtr->handPosition].level,
+        sStarterChoices[sBirchCaseDataPtr->handPosition].item,
+        sStarterChoices[sBirchCaseDataPtr->handPosition].ball,
+        sStarterChoices[sBirchCaseDataPtr->handPosition].nature,
+        sStarterChoices[sBirchCaseDataPtr->handPosition].abilityNum,
+        sStarterChoices[sBirchCaseDataPtr->handPosition].gender,
+        evs,
+        ivs,
+        moves,
+        sStarterChoices[sBirchCaseDataPtr->handPosition].ggMaxFactor,
+        sStarterChoices[sBirchCaseDataPtr->handPosition].teraType,
+        sStarterChoices[sBirchCaseDataPtr->handPosition].isShinyExpansion
+    );
+
+    FlagClear(FLAG_CHOSE_MUDKIP_BALL);
+    FlagClear(FLAG_CHOSE_TREECKO_BALL);
+    FlagClear(FLAG_CHOSE_TORCHIC_BALL);
+    FlagClear(FLAG_CHOSE_CHIKORITA_BALL);
+    FlagClear(FLAG_CHOSE_TOTODILE_BALL);
+    FlagClear(FLAG_CHOSE_CYNDAQUIL_BALL);
+    FlagClear(FLAG_CHOSE_BULBASAUR_BALL);
+    FlagClear(FLAG_CHOSE_CHARMANDER_BALL);
+    FlagClear(FLAG_CHOSE_SQUIRTLE_BALL);
+
+    SetStarterBallFlag(sBirchCaseDataPtr->handPosition);
+
+    switch (sStarterChoices[sBirchCaseDataPtr->handPosition].species)
+    {
+    case SPECIES_MUDKIP:
+        VarSet(VAR_RIVAL_STARTER_SPECIES, SPECIES_BULBASAUR);
+        VarSet(VAR_STARTER_MON, 1);
+        break;
+    case SPECIES_TREECKO:
+        VarSet(VAR_RIVAL_STARTER_SPECIES, SPECIES_CHARMANDER);
+        VarSet(VAR_STARTER_MON, 0);
+        break;
+    case SPECIES_TORCHIC:
+        VarSet(VAR_RIVAL_STARTER_SPECIES, SPECIES_SQUIRTLE);
+        VarSet(VAR_STARTER_MON, 2);
+        break;
+    case SPECIES_CHIKORITA:
+        VarSet(VAR_RIVAL_STARTER_SPECIES, SPECIES_CHARMANDER);
+        VarSet(VAR_STARTER_MON, 0);
+        break;
+    case SPECIES_TOTODILE:
+        VarSet(VAR_RIVAL_STARTER_SPECIES, SPECIES_BULBASAUR);
+        VarSet(VAR_STARTER_MON, 1);
+        break;
+    case SPECIES_CYNDAQUIL:
+        VarSet(VAR_RIVAL_STARTER_SPECIES, SPECIES_SQUIRTLE);
+        VarSet(VAR_STARTER_MON, 2);
+        break;
+    case SPECIES_BULBASAUR:
+        VarSet(VAR_RIVAL_STARTER_SPECIES, SPECIES_CHARMANDER);
+        VarSet(VAR_STARTER_MON, 0);
+        break;
+    case SPECIES_CHARMANDER:
+        VarSet(VAR_RIVAL_STARTER_SPECIES, SPECIES_SQUIRTLE);
+        VarSet(VAR_STARTER_MON, 2);
+        break;
+    case SPECIES_SQUIRTLE:
+        VarSet(VAR_RIVAL_STARTER_SPECIES, SPECIES_BULBASAUR);
+        VarSet(VAR_STARTER_MON, 1);
+    }
 }
 
-//specific for first starter pokemon
-//above function is general starter give
-static void BirchCase_GiveStarter() // Function that calls the GiveMon function pulled from Expansion by Lunos and Ghoulslash
+static void BirchCase_GiveStarter(void)
 {
-    u8 *evs = (u8 *) sStarterChoices[sBirchCaseDataPtr->handPosition].evs;
-    u8 *ivs = (u8 *) sStarterChoices[sBirchCaseDataPtr->handPosition].ivs;
-    u16 *moves = (u16 *) sStarterChoices[sBirchCaseDataPtr->handPosition].moves;
-    FlagSet(FLAG_SYS_POKEMON_GET);
-    BirchCase_GiveMonParameterized(sStarterChoices[sBirchCaseDataPtr->handPosition].species, sStarterChoices[sBirchCaseDataPtr->handPosition].level, \
-                sStarterChoices[sBirchCaseDataPtr->handPosition].item, sStarterChoices[sBirchCaseDataPtr->handPosition].ball, \
-                sStarterChoices[sBirchCaseDataPtr->handPosition].nature, sStarterChoices[sBirchCaseDataPtr->handPosition].abilityNum, \
-                sStarterChoices[sBirchCaseDataPtr->handPosition].gender, evs, ivs, moves, \
-                sStarterChoices[sBirchCaseDataPtr->handPosition].ggMaxFactor, sStarterChoices[sBirchCaseDataPtr->handPosition].teraType,\
-                sStarterChoices[sBirchCaseDataPtr->handPosition].isShinyExpansion);
+    u8 *evs = (u8 *)sStarterChoices[sBirchCaseDataPtr->handPosition].evs;
+    u8 *ivs = (u8 *)sStarterChoices[sBirchCaseDataPtr->handPosition].ivs;
+    u16 *moves = (u16 *)sStarterChoices[sBirchCaseDataPtr->handPosition].moves;
 
-    //store hand position can use that to get starter choice
-    //need to also translate into fire water grass value for varstarter mon
-    //nvm don't need hand position just need fire water grass value
-    gSpecialVar_Result = sStarterChoices[sBirchCaseDataPtr->handPosition].starterId;
+    BirchCase_GiveMonParameterized(
+        sStarterChoices[sBirchCaseDataPtr->handPosition].species,
+        sStarterChoices[sBirchCaseDataPtr->handPosition].level,
+        sStarterChoices[sBirchCaseDataPtr->handPosition].item,
+        sStarterChoices[sBirchCaseDataPtr->handPosition].ball,
+        sStarterChoices[sBirchCaseDataPtr->handPosition].nature,
+        sStarterChoices[sBirchCaseDataPtr->handPosition].abilityNum,
+        sStarterChoices[sBirchCaseDataPtr->handPosition].gender,
+        evs,
+        ivs,
+        moves,
+        sStarterChoices[sBirchCaseDataPtr->handPosition].ggMaxFactor,
+        sStarterChoices[sBirchCaseDataPtr->handPosition].teraType,
+        sStarterChoices[sBirchCaseDataPtr->handPosition].isShinyExpansion
+    );
+
+    FlagClear(FLAG_CHOSE_MUDKIP_BALL);
+    FlagClear(FLAG_CHOSE_TREECKO_BALL);
+    FlagClear(FLAG_CHOSE_TORCHIC_BALL);
+    FlagClear(FLAG_CHOSE_CHIKORITA_BALL);
+    FlagClear(FLAG_CHOSE_TOTODILE_BALL);
+    FlagClear(FLAG_CHOSE_CYNDAQUIL_BALL);
+    FlagClear(FLAG_CHOSE_BULBASAUR_BALL);
+    FlagClear(FLAG_CHOSE_CHARMANDER_BALL);
+    FlagClear(FLAG_CHOSE_SQUIRTLE_BALL);
+
+    SetStarterBallFlag(sBirchCaseDataPtr->handPosition);
+
+    switch (sStarterChoices[sBirchCaseDataPtr->handPosition].species)
+    {
+    case SPECIES_MUDKIP:
+        VarSet(VAR_RIVAL_STARTER_SPECIES, SPECIES_BULBASAUR);
+        VarSet(VAR_STARTER_MON, 1);
+        break;
+    case SPECIES_TREECKO:
+        VarSet(VAR_RIVAL_STARTER_SPECIES, SPECIES_CHARMANDER);
+        VarSet(VAR_STARTER_MON, 0);
+        break;
+    case SPECIES_TORCHIC:
+        VarSet(VAR_RIVAL_STARTER_SPECIES, SPECIES_SQUIRTLE);
+        VarSet(VAR_STARTER_MON, 2);
+        break;
+    case SPECIES_CHIKORITA:
+        VarSet(VAR_RIVAL_STARTER_SPECIES, SPECIES_CHARMANDER);
+        VarSet(VAR_STARTER_MON, 0);
+        break;
+    case SPECIES_TOTODILE:
+        VarSet(VAR_RIVAL_STARTER_SPECIES, SPECIES_BULBASAUR);
+        VarSet(VAR_STARTER_MON, 1);
+        break;
+    case SPECIES_CYNDAQUIL:
+        VarSet(VAR_RIVAL_STARTER_SPECIES, SPECIES_SQUIRTLE);
+        VarSet(VAR_STARTER_MON, 2);
+        break;
+    case SPECIES_BULBASAUR:
+        VarSet(VAR_RIVAL_STARTER_SPECIES, SPECIES_CHARMANDER);
+        VarSet(VAR_STARTER_MON, 0);
+        break;
+    case SPECIES_CHARMANDER:
+        VarSet(VAR_RIVAL_STARTER_SPECIES, SPECIES_SQUIRTLE);
+        VarSet(VAR_STARTER_MON, 2);
+        break;
+    case SPECIES_SQUIRTLE:
+        VarSet(VAR_RIVAL_STARTER_SPECIES, SPECIES_BULBASAUR);
+        VarSet(VAR_STARTER_MON, 1);
+    }
 }
+
 
 //==========FUNCTIONS==========//
 // UI loader template functions by Ghoulslash

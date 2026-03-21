@@ -487,6 +487,26 @@ void CreateWildMon(u16 species, u8 level)
     u32 personality = GetMonPersonality(species, GetSynchronizedGender(WILDMON_ORIGIN, species), PickWildMonNature(species), RANDOM_UNOWN_LETTER);
     CreateMonWithIVs(&gEnemyParty[0], species, level, personality, OTID_STRUCT_PLAYER_ID, USE_RANDOM_IVS);
     GiveMonInitialMoveset(&gEnemyParty[0]);
+
+    // -------------------------------
+    // MINIMAL GRINDING OVERRIDE
+    // -------------------------------
+    if (FlagGet(FLAG_MIN_GRINDING_MODE))
+    {
+        u8 perfectIv = 31;
+        u8 zero = 0;
+        s32 i;
+
+        for (i = 0; i < NUM_STATS; i++)
+            SetMonData(&gEnemyParty[0], MON_DATA_HP_IV + i, &perfectIv);
+
+        for (i = 0; i < NUM_STATS; i++)
+            SetMonData(&gEnemyParty[0], MON_DATA_HP_EV + i, &zero);
+
+        CalculateMonStats(&gEnemyParty[0]);
+    }
+    // -------------------------------
+
     // NOW check Nuzlocke indicator after Pokemon is created and has personality
     if (IsNuzlockeActive() && FlagGet(FLAG_SYS_POKEDEX_GET))
     {
@@ -510,6 +530,7 @@ void CreateWildMon(u16 species, u8 level)
         }
     }
 }
+
 
 #ifdef BUGFIX
 #define TRY_GET_ABILITY_INFLUENCED_WILD_MON_INDEX(wildPokemon, type, ability, ptr, count) TryGetAbilityInfluencedWildMonIndex(wildPokemon, type, ability, ptr, count)

@@ -98,6 +98,8 @@ void MoveAllRoamers(void)
         RoamerMove(i);
 }
 
+// CreateInitialRoamerMon
+// ============================================================
 static void CreateInitialRoamerMon(u8 index, u16 species, u8 level)
 {
     ClearRoamerLocationHistory(index);
@@ -105,8 +107,26 @@ static void CreateInitialRoamerMon(u8 index, u16 species, u8 level)
         GetSynchronizedGender(ROAMER_ORIGIN, species),
         GetSynchronizedNature(ROAMER_ORIGIN, species),
         RANDOM_UNOWN_LETTER);
+
     CreateMonWithIVs(&gEnemyParty[0], species, level, personality, OTID_STRUCT_PLAYER_ID, USE_RANDOM_IVS);
     GiveMonInitialMoveset(&gEnemyParty[0]);
+
+    // Minimal Grinding override
+    if (FlagGet(FLAG_MIN_GRINDING_MODE))
+    {
+        u8 perfectIv = 31;
+        u8 zero = 0;
+        s32 i;
+
+        for (i = 0; i < NUM_STATS; i++)
+            SetMonData(&gEnemyParty[0], MON_DATA_HP_IV + i, &perfectIv);
+
+        for (i = 0; i < NUM_STATS; i++)
+            SetMonData(&gEnemyParty[0], MON_DATA_HP_EV + i, &zero);
+
+        CalculateMonStats(&gEnemyParty[0]);
+    }
+
     ROAMER(index)->ivs = GetMonData(&gEnemyParty[0], MON_DATA_IVS);
     ROAMER(index)->personality = GetMonData(&gEnemyParty[0], MON_DATA_PERSONALITY);
     ROAMER(index)->species = species;
@@ -124,7 +144,6 @@ static void CreateInitialRoamerMon(u8 index, u16 species, u8 level)
     sRoamerLocation[index][MAP_GRP] = ROAMER_MAP_GROUP;
     sRoamerLocation[index][MAP_NUM] = sRoamerLocations[Random() % NUM_LOCATION_SETS][0];
 }
-
 static u8 GetFirstInactiveRoamerIndex(void)
 {
     u32 i;

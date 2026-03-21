@@ -275,6 +275,18 @@ gText_OakSpeech_YesNuzlocke::
 	.string "Every one of them will be important!\p"
 	.string "$"
 
+gOakSpeech_Text_MinimalGrinding::
+    .string "Enable MINIMAL GRINDING MODE?\n"
+    .string "Perfect IVs, no EVs.$"
+
+gOakSpeech_Text_MinimalGrindingYes::
+    .string "Very well!\n"
+    .string "I'll streamline your journey.$"
+
+gOakSpeech_Text_MinimalGrindingNo::
+    .string "As you wish.\n"
+    .string "The classic challenge awaits!$"
+
 gOakSpeech_Text_LetsGo::
 	.string "{PLAYER}!\p"
 	.string "Your very own POKéMON legend is\n"

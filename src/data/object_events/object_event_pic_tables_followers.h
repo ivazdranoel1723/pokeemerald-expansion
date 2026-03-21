@@ -3540,6 +3540,9 @@ static const struct SpriteFrameImage sPicTable_RotomFan[] = {
 static const struct SpriteFrameImage sPicTable_RotomMow[] = {
     overworld_ascending_frames(gObjectEventPic_RotomMow, 4, 4),
 };
+static const struct SpriteFrameImage sPicTable_RotomSound[] = {
+    overworld_ascending_frames(gObjectEventPic_RotomSound, 4, 4),
+};
 #endif //P_FAMILY_ROTOM
 
 #if P_FAMILY_UXIE

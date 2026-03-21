@@ -99,6 +99,11 @@ static void Task_OakSpeech_CreateNuzlockeYesNo(u8);
 static void Task_OakSpeech_ProcessNuzlockeYesNoMenu(u8);
 static void Task_OakSpeech_YesNuzlocke(u8);
 static void Task_OakSpeech_NoNuzlocke(u8);
+static void Task_OakSpeech_MinimalGrinding(u8);
+static void Task_OakSpeech_CreateMinimalGrindingYesNo(u8);
+static void Task_OakSpeech_ProcessMinimalGrindingYesNoMenu(u8);
+static void Task_OakSpeech_YesMinimalGrinding(u8);
+static void Task_OakSpeech_NoMinimalGrinding(u8);
 static void Task_OakSpeech_Farewell(u8);
 static void Task_OakSpeech_LetsGo(u8);
 static void Task_OakSpeech_FadeOutBGM(u8);
@@ -1629,7 +1634,16 @@ static void Task_OakSpeech_CreateNuzlockeYesNo(u8 taskId)
 {
     if (!RunTextPrintersAndIsPrinter0Active())
     {
-        CreateYesNoMenuParameterized(2, 1, 0xF3, 0xDF, 2, 15);
+        CreateYesNoMenuAtPos(
+            &sIntro_WindowTemplates[WIN_INTRO_YESNO],
+            FONT_NORMAL,
+            0,                      // initial cursor position
+            2,                      // vertical spacing
+            STD_WINDOW_BASE_TILE_NUM,
+            14,                     // palette
+            0                       // flags
+        );
+
         gTasks[taskId].func = Task_OakSpeech_ProcessNuzlockeYesNoMenu;
     }
 }
@@ -1656,7 +1670,7 @@ static void Task_OakSpeech_YesNuzlocke(u8 taskId)
     sNuzlockeModeSelected = TRUE;
     ClearWindowTilemap(sOakSpeechResources->windowIds[0]);
     OakSpeechPrintMessage(gText_OakSpeech_YesNuzlocke, sOakSpeechResources->textSpeed, FALSE);
-    gTasks[taskId].func = Task_OakSpeech_Farewell;
+    gTasks[taskId].func = Task_OakSpeech_MinimalGrinding;
 }
 
 static void Task_OakSpeech_NoNuzlocke(u8 taskId)
@@ -1664,8 +1678,69 @@ static void Task_OakSpeech_NoNuzlocke(u8 taskId)
     FlagClear(FLAG_NUZLOCKE);
     ClearWindowTilemap(sOakSpeechResources->windowIds[0]);
     OakSpeechPrintMessage(gText_OakSpeech_NoNuzlocke, sOakSpeechResources->textSpeed, FALSE);
+    gTasks[taskId].func = Task_OakSpeech_MinimalGrinding;
+}
+
+static void Task_OakSpeech_MinimalGrinding(u8 taskId)
+{
+    if (!RunTextPrintersAndIsPrinter0Active())
+    {
+        ClearWindowTilemap(sOakSpeechResources->windowIds[0]);
+        OakSpeechPrintMessage(gOakSpeech_Text_MinimalGrinding, sOakSpeechResources->textSpeed, FALSE);
+        gTasks[taskId].func = Task_OakSpeech_CreateMinimalGrindingYesNo;
+    }
+}
+
+static void Task_OakSpeech_CreateMinimalGrindingYesNo(u8 taskId)
+{
+    if (!RunTextPrintersAndIsPrinter0Active())
+    {
+        CreateYesNoMenuAtPos(
+            &sIntro_WindowTemplates[WIN_INTRO_YESNO],
+            FONT_NORMAL,
+            0,                      
+            2,                      
+            STD_WINDOW_BASE_TILE_NUM,
+            14,                     
+            0                       
+        );
+
+        gTasks[taskId].func = Task_OakSpeech_ProcessMinimalGrindingYesNoMenu;
+    }
+}
+
+static void Task_OakSpeech_ProcessMinimalGrindingYesNoMenu(u8 taskId)
+{
+    s8 input = Menu_ProcessInputNoWrapClearOnChoose();
+
+    if (input == 0)
+    {
+        PlaySE(SE_SELECT);
+        gTasks[taskId].func = Task_OakSpeech_YesMinimalGrinding;
+    }
+    else if (input == 1 || input == MENU_B_PRESSED)
+    {
+        PlaySE(SE_SELECT);
+        gTasks[taskId].func = Task_OakSpeech_NoMinimalGrinding;
+    }
+}
+
+static void Task_OakSpeech_YesMinimalGrinding(u8 taskId)
+{
+    FlagSet(FLAG_MIN_GRINDING_MODE);
+    ClearWindowTilemap(sOakSpeechResources->windowIds[0]);
+    OakSpeechPrintMessage(gOakSpeech_Text_MinimalGrindingYes, sOakSpeechResources->textSpeed, FALSE);
     gTasks[taskId].func = Task_OakSpeech_Farewell;
 }
+
+static void Task_OakSpeech_NoMinimalGrinding(u8 taskId)
+{
+    FlagClear(FLAG_MIN_GRINDING_MODE);
+    ClearWindowTilemap(sOakSpeechResources->windowIds[0]);
+    OakSpeechPrintMessage(gOakSpeech_Text_MinimalGrindingYes, sOakSpeechResources->textSpeed, FALSE);
+    gTasks[taskId].func = Task_OakSpeech_Farewell;
+}
+
 
 static void Task_OakSpeech_Farewell(u8 taskId)
 {

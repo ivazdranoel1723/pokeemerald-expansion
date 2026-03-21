@@ -2116,15 +2116,19 @@ static void InitDomeTrainers(void)
 #define CALC_STAT(base, statIndex)                                                          \
 {                                                                                           \
     u8 baseStat = gSpeciesInfo[fmon->species].base;                                                 \
-    stats[statIndex] = (((2 * baseStat + ivs + evs[statIndex] / 4) * level) / 100) + 5;     \
+    if (FlagGet(FLAG_MIN_GRINDING_MODE))                     \
+        stats[statIndex] = (((2 * baseStat + ivs) * level) / 100) + 5;                      \
+    else                                                                                   \
+        stats[statIndex] = (((2 * baseStat + ivs + evs[statIndex] / 4) * level) / 100) + 5;     \
     stats[statIndex] = (u8) ModifyStatByNature(fmon->nature, stats[statIndex], statIndex);        \
 }
 
 static void CalcDomeMonStats(const struct TrainerMon *fmon, int level, u8 ivs, int *stats)
 {
     int evs[NUM_STATS];
+    int i;
 
-    for (enum Stat i = 0; i < NUM_STATS; i++)
+    for (i = 0; i < NUM_STATS; i++)
     {
         if (fmon->ev != NULL)
             evs[i] = fmon->ev[i];
@@ -2138,8 +2142,11 @@ static void CalcDomeMonStats(const struct TrainerMon *fmon, int level, u8 ivs, i
     }
     else
     {
-        int n = 2 * GetSpeciesBaseHP(fmon->species);
-        stats[STAT_HP] = (((n + ivs + evs[STAT_HP] / 4) * level) / 100) + level + 10;
+        int n = 2 * gSpeciesInfo[fmon->species].baseHP;
+        if (FlagGet(FLAG_MIN_GRINDING_MODE))
+            stats[STAT_HP] = (((n + ivs) * level) / 100) + level + 10;
+        else
+            stats[STAT_HP] = (((n + ivs + evs[STAT_HP] / 4) * level) / 100) + level + 10;
     }
 
     CALC_STAT(baseAttack, STAT_ATK);

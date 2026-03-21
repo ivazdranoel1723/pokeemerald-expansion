@@ -735,6 +735,7 @@ enum MoveTarget
 #define PARENTAL_BOND_2ND_HIT 1
 #define PARENTAL_BOND_OFF     0
 
+
 // Constants for Torment
 #define PERMANENT_TORMENT   0xF
 

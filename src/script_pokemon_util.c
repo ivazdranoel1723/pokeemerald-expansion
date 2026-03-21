@@ -131,8 +131,32 @@ void CreateScriptedWildMon(u16 species, u8 level, enum Item item)
         GetSynchronizedGender(STATIC_WILDMON_ORIGIN, species),
         GetSynchronizedNature(STATIC_WILDMON_ORIGIN, species),
         RANDOM_UNOWN_LETTER);
+
     CreateMonWithIVs(&gEnemyParty[0], species, level, personality, OTID_STRUCT_PLAYER_ID, USE_RANDOM_IVS);
     GiveMonInitialMoveset(&gEnemyParty[0]);
+
+    // -----------------------------------
+    // Minimal Grinding Mode override
+    // -----------------------------------
+    if (FlagGet(FLAG_MIN_GRINDING_MODE))
+    {
+        u8 perfectIv = 31;
+        u8 zero = 0;
+        s32 i;
+
+        // Perfect IVs
+        for (i = 0; i < NUM_STATS; i++)
+            SetMonData(&gEnemyParty[0], MON_DATA_HP_IV + i, &perfectIv);
+
+        // Zero EVs
+        for (i = 0; i < NUM_STATS; i++)
+            SetMonData(&gEnemyParty[0], MON_DATA_HP_EV + i, &zero);
+
+        // Recalculate stats after IV/EV changes
+        CalculateMonStats(&gEnemyParty[0]);
+    }
+    // -----------------------------------
+
     if (item)
     {
         heldItem[0] = item;
@@ -140,18 +164,42 @@ void CreateScriptedWildMon(u16 species, u8 level, enum Item item)
         SetMonData(&gEnemyParty[0], MON_DATA_HELD_ITEM, heldItem);
     }
 }
-void CreateScriptedDoubleWildMon(u16 species1, u8 level1, enum Item item1, u16 species2, u8 level2, enum Item item2)
+
+void CreateScriptedDoubleWildMon(u16 species1, u8 level1, enum Item item1,
+                                 u16 species2, u8 level2, enum Item item2)
 {
     u8 heldItem1[2];
     u8 heldItem2[2];
 
     ZeroEnemyPartyMons();
+
+    // --------------------------
+    // First Pokémon
+    // --------------------------
     u32 personality = GetMonPersonality(species1,
         GetSynchronizedGender(STATIC_WILDMON_ORIGIN, species1),
         GetSynchronizedNature(STATIC_WILDMON_ORIGIN, species1),
         RANDOM_UNOWN_LETTER);
+
     CreateMonWithIVs(&gEnemyParty[0], species1, level1, personality, OTID_STRUCT_PLAYER_ID, USE_RANDOM_IVS);
     GiveMonInitialMoveset(&gEnemyParty[0]);
+
+    // Minimal Grinding override
+    if (FlagGet(FLAG_MIN_GRINDING_MODE))
+    {
+        u8 perfectIv = 31;
+        u8 zero = 0;
+        s32 i;
+
+        for (i = 0; i < NUM_STATS; i++)
+            SetMonData(&gEnemyParty[0], MON_DATA_HP_IV + i, &perfectIv);
+
+        for (i = 0; i < NUM_STATS; i++)
+            SetMonData(&gEnemyParty[0], MON_DATA_HP_EV + i, &zero);
+
+        CalculateMonStats(&gEnemyParty[0]);
+    }
+
     if (item1)
     {
         heldItem1[0] = item1;
@@ -159,12 +207,33 @@ void CreateScriptedDoubleWildMon(u16 species1, u8 level1, enum Item item1, u16 s
         SetMonData(&gEnemyParty[0], MON_DATA_HELD_ITEM, heldItem1);
     }
 
+    // --------------------------
+    // Second Pokémon
+    // --------------------------
     personality = GetMonPersonality(species2,
         GetSynchronizedGender(STATIC_WILDMON_ORIGIN, species2),
         GetSynchronizedNature(STATIC_WILDMON_ORIGIN, species2),
         RANDOM_UNOWN_LETTER);
+
     CreateMonWithIVs(&gEnemyParty[1], species2, level2, personality, OTID_STRUCT_PLAYER_ID, USE_RANDOM_IVS);
     GiveMonInitialMoveset(&gEnemyParty[1]);
+
+    // Minimal Grinding override
+    if (FlagGet(FLAG_MIN_GRINDING_MODE))
+    {
+        u8 perfectIv = 31;
+        u8 zero = 0;
+        s32 i;
+
+        for (i = 0; i < NUM_STATS; i++)
+            SetMonData(&gEnemyParty[1], MON_DATA_HP_IV + i, &perfectIv);
+
+        for (i = 0; i < NUM_STATS; i++)
+            SetMonData(&gEnemyParty[1], MON_DATA_HP_EV + i, &zero);
+
+        CalculateMonStats(&gEnemyParty[1]);
+    }
+
     if (item2)
     {
         heldItem2[0] = item2;
@@ -172,6 +241,7 @@ void CreateScriptedDoubleWildMon(u16 species1, u8 level1, enum Item item1, u16 s
         SetMonData(&gEnemyParty[1], MON_DATA_HELD_ITEM, heldItem2);
     }
 }
+
 
 void ScriptSetMonMoveSlot(u8 monIndex, enum Move move, u8 slot)
 {
@@ -376,6 +446,25 @@ static u32 ScriptGiveMonParameterized(u8 side, u8 slot, u16 species, u8 level, e
     u32 personality = GetMonPersonality(species, gender, nature, RANDOM_UNOWN_LETTER);
     CreateMon(&mon, species, level, personality, OTID_STRUCT_PLAYER_ID);
 
+    // -------------------------------
+    // MINIMAL GRINDING OVERRIDE
+    // -------------------------------
+    if (FlagGet(FLAG_MIN_GRINDING_MODE))
+    {
+        u8 perfectIv = 31;
+        u8 zero = 0;
+        s32 j;
+
+        for (j = 0; j < NUM_STATS; j++)
+            SetMonData(&mon, MON_DATA_HP_IV + j, &perfectIv);
+
+        for (j = 0; j < NUM_STATS; j++)
+            SetMonData(&mon, MON_DATA_HP_EV + j, &zero);
+
+        CalculateMonStats(&mon);
+    }
+    // -------------------------------
+
     // shininess
     if (shinyMode == SHINY_MODE_ALWAYS || (P_FLAG_FORCE_SHINY != 0 && FlagGet(P_FLAG_FORCE_SHINY)))
         isShiny = TRUE;
@@ -488,6 +577,26 @@ u32 ScriptGiveMon(u16 species, u8 level, enum Item item)
     u8 heldItem[2];
 
     CreateRandomMon(&mon, species, level);
+
+    // -------------------------------
+    // MINIMAL GRINDING OVERRIDE
+    // -------------------------------
+    if (FlagGet(FLAG_MIN_GRINDING_MODE))
+    {
+        u8 perfectIv = 31;
+        u8 zero = 0;
+        s32 i;
+
+        for (i = 0; i < NUM_STATS; i++)
+            SetMonData(&mon, MON_DATA_HP_IV + i, &perfectIv);
+
+        for (i = 0; i < NUM_STATS; i++)
+            SetMonData(&mon, MON_DATA_HP_EV + i, &zero);
+
+        CalculateMonStats(&mon);
+    }
+    // -------------------------------
+
     if (item)
     {
         heldItem[0] = item;
@@ -497,6 +606,7 @@ u32 ScriptGiveMon(u16 species, u8 level, enum Item item)
 
     return GiveScriptedMonToPlayer(&mon, PARTY_SIZE);
 }
+
 
 #define PARSE_FLAG(n, default_) (flags & (1 << (n))) ? VarGet(ScriptReadHalfword(ctx)) : (default_)
 
@@ -565,7 +675,6 @@ void ScrCmd_createmon(struct ScriptContext *ctx)
     // Perfect IV calculation
     if (gSpeciesInfo[species].perfectIVCount != 0)
     {
-        // Select the IVs that will be perfected.
         for (i = 0; i < nonFixedIvCount && i < gSpeciesInfo[species].perfectIVCount; i++)
         {
             u8 index = Random() % (nonFixedIvCount - i);
@@ -592,7 +701,6 @@ void ScrCmd_createmon(struct ScriptContext *ctx)
         moves[i] = MOVE_NONE;
 
     i = 0;
-    //Reorder moves to put non-default moves first, default moves second and empty moves last
     ADD_MOVE_IF_NOT_DEFAULT(i, move1)
     ADD_MOVE_IF_NOT_DEFAULT(i, move2)
     ADD_MOVE_IF_NOT_DEFAULT(i, move3)
@@ -619,8 +727,26 @@ void ScrCmd_createmon(struct ScriptContext *ctx)
     if (nature == NATURE_MAY_SYNCHRONIZE)
         nature = GetSynchronizedNature(origin, species);
 
+    // -------------------------------
+    // MINIMAL GRINDING OVERRIDE
+    // -------------------------------
+    if (FlagGet(FLAG_MIN_GRINDING_MODE))
+    {
+        u8 perfectIv = 31;
+        u8 zero = 0;
+        s32 j;
+
+        for (j = 0; j < NUM_STATS; j++)
+            ivs[j] = perfectIv;
+
+        for (j = 0; j < NUM_STATS; j++)
+            evs[j] = zero;
+    }
+    // -------------------------------
+
     gSpecialVar_Result = ScriptGiveMonParameterized(side, slot, species, level, item, ball, nature, abilityNum, gender, evs, ivs, moves, shinyMode, gmaxFactor, teraType, dmaxLevel);
 }
+
 
 #undef PARSE_FLAG
 

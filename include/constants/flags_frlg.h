@@ -149,8 +149,8 @@
 #define FLAG_HIDE_SAFFRON_CITY_POKECENTER_SABRINA_JOURNALS 0x0AE
 
 // Unused?
-#define FLAG_NUZLOCKE       0x0AF
-#define FLAG_0x0B0               0x0B0
+#define FLAG_NUZLOCKE            0x0AF
+#define FLAG_MIN_GRINDING_MODE   0x0B0
 #define FLAG_0x0B1               0x0B1
 #define FLAG_0x0B2               0x0B2
 #define FLAG_0x0B3               0x0B3
@@ -753,10 +753,10 @@
 #define FLAG_OAKS_RATING_IS_VIA_PC                       0x2FF
 
 // Unused?
-#define FLAG_0x300               0x300
-#define FLAG_0x301               0x301
-#define FLAG_0x302               0x302
-#define FLAG_0x303               0x303
+#define FLAG_UNUSED_0x300        0x300
+#define FLAG_UNUSED_0x301        0x301
+#define FLAG_UNUSED_0x302        0x302
+#define FLAG_UNUSED_0x303        0x303
 #define FLAG_0x304               0x304
 #define FLAG_0x305               0x305
 #define FLAG_0x306               0x306
@@ -1218,15 +1218,15 @@
 #define FLAG_ENTERED_ELITE_4     0x4BE
 #define FLAG_DISABLE_FOLLOWERS   0x4BF
 #define FLAG_USING_POKEMONPCMENU 0x4C0
-#define FLAG_0x4C1               0x4C1
-#define FLAG_0x4C2               0x4C2
-#define FLAG_0x4C3               0x4C3
-#define FLAG_0x4C4               0x4C4
-#define FLAG_0x4C5               0x4C5
-#define FLAG_0x4C6               0x4C6
-#define FLAG_0x4C7               0x4C7
-#define FLAG_0x4C8               0x4C8
-#define FLAG_0x4C9               0x4C9
+#define FLAG_CHOSE_MUDKIP_BALL     0x4C1
+#define FLAG_CHOSE_TREECKO_BALL    0x4C2
+#define FLAG_CHOSE_TORCHIC_BALL    0x4C3
+#define FLAG_CHOSE_CHIKORITA_BALL  0x4C4
+#define FLAG_CHOSE_TOTODILE_BALL   0x4C5
+#define FLAG_CHOSE_CYNDAQUIL_BALL  0x4C6
+#define FLAG_CHOSE_BULBASAUR_BALL  0x4C7
+#define FLAG_CHOSE_CHARMANDER_BALL 0x4C8
+#define FLAG_CHOSE_SQUIRTLE_BALL   0x4C9
 #define FLAG_0x4CA               0x4CA
 #define FLAG_0x4CB               0x4CB
 #define FLAG_0x4CC               0x4CC
@@ -2590,15 +2590,15 @@
 #define FLAG_UNUSED_0x8E3                           0 // Unused Flag
 #define FLAG_RECEIVED_POKEDEX_FROM_BIRCH            0
 
-#define FLAG_UNUSED_0x8E5                           0
-#define FLAG_UNUSED_0x8E6                           0
-#define FLAG_UNUSED_0x8E7                           0
-#define FLAG_UNUSED_0x8E8                           0
-#define FLAG_UNUSED_0x8E9                           0
-#define FLAG_UNUSED_0x8EA                           0
-#define FLAG_UNUSED_0x8EB                           0
-#define FLAG_UNUSED_0x8EC                           0
-#define FLAG_UNUSED_0x8ED                           0
+#define FLAG_UNUSED_0x8E5                           0 //mudkip
+#define FLAG_UNUSED_0x8E6                           0 //tree
+#define FLAG_UNUSED_0x8E7                           0 //torchic
+#define FLAG_UNUSED_0x8E8                           0 //chiko
+#define FLAG_UNUSED_0x8E9                           0 //toto
+#define FLAG_UNUSED_0x8EA                           0 //cynda
+#define FLAG_UNUSED_0x8EB                           0 //bulb
+#define FLAG_UNUSED_0x8EC                           0 //charm
+#define FLAG_UNUSED_0x8ED                           0 //sq
 #define FLAG_UNUSED_0x8EE                           0
 #define FLAG_UNUSED_0x8EF                           0
 #define FLAG_UNUSED_0x8F0                           0

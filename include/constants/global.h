@@ -179,9 +179,15 @@ enum ContestCategories
 //for birch case upgrade
 enum StarterIds
 {
-    GRASS_STARTER,
-    FIRE_STARTER,
-    WATER_STARTER,
+    STARTER_BULBASAUR,
+    STARTER_CHIKORITA,
+    STARTER_TREECKO,
+    STARTER_SQUIRTLE,
+    STARTER_TOTODILE,
+    STARTER_MUDKIP,
+    STARTER_CHARMANDER,
+    STARTER_CYNDAQUIL,
+    STARTER_TORCHIC,
 };
 //Birch End
 
