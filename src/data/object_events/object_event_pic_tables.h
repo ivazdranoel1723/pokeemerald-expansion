@@ -354,6 +354,10 @@ static const struct SpriteFrameImage sPicTable_BreakableRock[] = {
     overworld_ascending_frames(gObjectEventPic_BreakableRock, 2, 2),
 };
 
+static const struct SpriteFrameImage sPicTable_Briefcase[] = {
+    obj_frame_tiles(gObjectEventPic_Briefcase),
+};
+
 static const struct SpriteFrameImage sPicTable_PushableBoulder[] = {
     obj_frame_tiles(gObjectEventPic_PushableBoulder),
 };
