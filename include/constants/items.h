@@ -1069,6 +1069,7 @@ enum __attribute__((packed)) Item
     ITEM_CENTISKITE = 890,
     ITEM_GRIMMITE = 891,
     ITEM_COPPERAJITE = 892,
+    ITEM_VARIABLE_ROD = 893,
 
     ITEMS_COUNT,
     ITEM_FIELD_ARROW = ITEMS_COUNT,

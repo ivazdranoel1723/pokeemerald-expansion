@@ -63,6 +63,7 @@ static void Task_OpenRegisteredPokeblockCase(u8);
 static void Task_AccessPokemonBoxLink(u8);
 static void ItemUseOnFieldCB_Bike(u8);
 static void ItemUseOnFieldCB_Rod(u8);
+static void ItemUseOnFieldCB_VariableRod(u8);
 static void ItemUseOnFieldCB_Itemfinder(u8);
 static void ItemUseOnFieldCB_Berry(u8);
 static void ItemUseOnFieldCB_WailmerPailBerry(u8);
@@ -414,6 +415,34 @@ void ItemUseOutOfBattle_Rod(u8 taskId)
 static void ItemUseOnFieldCB_Rod(u8 taskId)
 {
     StartFishing(GetItemSecondaryId(gSpecialVar_ItemId));
+    DestroyTask(taskId);
+}
+
+void ItemUseOutOfBattle_VariableRod(u8 taskId)
+{
+    if (CanFish() == TRUE && OW_VAR_VARIABLE_ROD_USE_TECHNIQUE != 0)
+    {
+        sItemUseOnFieldCB = ItemUseOnFieldCB_VariableRod;
+        SetUpItemUseOnFieldCallback(taskId);
+    }
+    else
+        DisplayDadsAdviceCannotUseItemMessage(taskId, gTasks[taskId].tUsingRegisteredKeyItem);
+}
+
+static void ItemUseOnFieldCB_VariableRod(u8 taskId)
+{
+    switch (VarGet(OW_VAR_VARIABLE_ROD_USE_TECHNIQUE))
+    {
+    case SUPER_ROD:
+    case GOOD_ROD:
+        StartFishing(VarGet(OW_VAR_VARIABLE_ROD_USE_TECHNIQUE));
+        break;
+
+    case OLD_ROD:
+    default:
+        StartFishing(OLD_ROD);
+        break;
+    }
     DestroyTask(taskId);
 }
 

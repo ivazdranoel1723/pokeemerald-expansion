@@ -92,6 +92,9 @@ enum {
     ACTION_SHOW,
     ACTION_GIVE_FAVOR_LADY,
     ACTION_CONFIRM_QUIZ_LADY,
+    ACTION_OLD_TECHNIQUE,
+    ACTION_GOOD_TECHNIQUE,
+    ACTION_SUPER_TECHNIQUE,
     ACTION_BY_NAME,
     ACTION_BY_TYPE,
     ACTION_BY_AMOUNT,
@@ -200,6 +203,9 @@ static void DrawItemListBgRow(u8);
 static void BagMenu_MoveCursorCallback(s32, bool8, struct ListMenu *);
 static void BagMenu_ItemPrintCallback(u8, u32, u8);
 static void ItemMenu_UseOutOfBattle(u8);
+static void ItemMenu_UseOutOfBattle_VariableOldRod(u8);
+static void ItemMenu_UseOutOfBattle_VariableGoodRod(u8);
+static void ItemMenu_UseOutOfBattle_VariableSuperRod(u8);
 static void ItemMenu_Toss(u8);
 static void ItemMenu_Register(u8);
 static void ItemMenu_Give(u8);
@@ -220,6 +226,9 @@ static void ConfirmSell(u8);
 static void CancelSell(u8);
 static void Task_FadeAndCloseBagMenuIfMulch(u8 taskId);
 static void Task_KeyItemWheel(u8 taskId);
+static const u8 sMenuText_OldTech[] = _("Old {FONT_NARROWER}Tech.");
+static const u8 sMenuText_GoodTech[] = _("Good {FONT_NARROWER}Tech.");
+static const u8 sMenuText_SuperTech[] = _("Super {FONT_NARROWER}Tech.");
 
 static const u8 sText_Var1CantBeHeldHere[] = _("The {STR_VAR_1} can't be held\nhere.");
 static const u8 sText_DepositHowManyVar1[] = _("Deposit how many\n{STR_VAR_1}?");
@@ -309,6 +318,9 @@ static const struct MenuAction sItemMenuActions[] = {
     [ACTION_SHOW]              = {COMPOUND_STRING("SHOW"),      {ItemMenu_Show}},
     [ACTION_GIVE_FAVOR_LADY]   = {gMenuText_Give2,              {ItemMenu_GiveFavorLady}},
     [ACTION_CONFIRM_QUIZ_LADY] = {gMenuText_Confirm,            {ItemMenu_ConfirmQuizLady}},
+    [ACTION_OLD_TECHNIQUE]     = {sMenuText_OldTech,  {ItemMenu_UseOutOfBattle_VariableOldRod}},
+    [ACTION_GOOD_TECHNIQUE]    = {sMenuText_GoodTech, {ItemMenu_UseOutOfBattle_VariableGoodRod}},
+    [ACTION_SUPER_TECHNIQUE]   = {sMenuText_SuperTech,{ItemMenu_UseOutOfBattle_VariableSuperRod}},
     [ACTION_BY_NAME]           = {COMPOUND_STRING("Name"),      {ItemMenu_SortByName}},
     [ACTION_BY_TYPE]           = {COMPOUND_STRING("Type"),      {ItemMenu_SortByType}},
     [ACTION_BY_AMOUNT]         = {COMPOUND_STRING("Amount"),    {ItemMenu_SortByAmount}},
@@ -377,6 +389,22 @@ static const u8 sContextMenuItems_FavorLady[] = {
 
 static const u8 sContextMenuItems_QuizLady[] = {
     ACTION_CONFIRM_QUIZ_LADY, ACTION_CANCEL
+};
+
+static const u8 sContextMenuItems_OldVariableRod[] = {
+    ACTION_OLD_TECHNIQUE,   ACTION_REGISTER,
+    ACTION_DUMMY,           ACTION_CANCEL
+};
+
+static const u8 sContextMenuItems_GoodVariableRod[] = {
+    ACTION_OLD_TECHNIQUE,   ACTION_REGISTER,
+    ACTION_GOOD_TECHNIQUE,  ACTION_CANCEL
+};
+
+static const u8 sContextMenuItems_SuperVariableRod[] = {
+    ACTION_OLD_TECHNIQUE,   ACTION_REGISTER,
+    ACTION_GOOD_TECHNIQUE,  ACTION_DUMMY,
+    ACTION_SUPER_TECHNIQUE, ACTION_CANCEL
 };
 
 static const TaskFunc sContextMenuFuncs[] = {
@@ -1886,12 +1914,29 @@ static void OpenContextMenu(u8 taskId)
                     if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_MACH_BIKE | PLAYER_AVATAR_FLAG_ACRO_BIKE))
                         gBagMenu->contextMenuItemsBuffer[0] = ACTION_WALK;
                 }
+                if (gSpecialVar_ItemId == ITEM_VARIABLE_ROD)
+                {
+                    if (OW_FLAG_VARIABLE_ROD_SUPER_TECHNIQUE != 0 && FlagGet(OW_FLAG_VARIABLE_ROD_SUPER_TECHNIQUE))
+                    {
+                        gBagMenu->contextMenuItemsPtr = gBagMenu->contextMenuItemsBuffer;
+                        gBagMenu->contextMenuNumItems = ARRAY_COUNT(sContextMenuItems_SuperVariableRod);
+                        memcpy(&gBagMenu->contextMenuItemsBuffer, &sContextMenuItems_SuperVariableRod, sizeof(sContextMenuItems_SuperVariableRod));
+                    }
+                    else if (OW_FLAG_VARIABLE_ROD_GOOD_TECHNIQUE != 0 && FlagGet(OW_FLAG_VARIABLE_ROD_GOOD_TECHNIQUE))
+                    {
+                        gBagMenu->contextMenuItemsPtr = gBagMenu->contextMenuItemsBuffer;
+                        gBagMenu->contextMenuNumItems = ARRAY_COUNT(sContextMenuItems_GoodVariableRod);
+                        memcpy(&gBagMenu->contextMenuItemsBuffer, &sContextMenuItems_GoodVariableRod, sizeof(sContextMenuItems_GoodVariableRod));
+                    }
+                    else
+                    {
+                        gBagMenu->contextMenuItemsPtr = gBagMenu->contextMenuItemsBuffer;
+                        gBagMenu->contextMenuNumItems = ARRAY_COUNT(sContextMenuItems_OldVariableRod);
+                        memcpy(&gBagMenu->contextMenuItemsBuffer, &sContextMenuItems_OldVariableRod, sizeof(sContextMenuItems_OldVariableRod));
+                    }
+                }
 
-                //tx_registered_items_menu
-                //if (TxRegItemsMenu_CheckRegisteredHasItem(gSpecialVar_ItemId))
-                    //gBagMenu->contextMenuItemsBuffer[1] = ACTION_DESELECT;
-
-               //break;
+                break;
             case POCKET_POKE_BALLS:
                 gBagMenu->contextMenuItemsPtr = sContextMenuItems_BallsPocket;
                 gBagMenu->contextMenuNumItems = ARRAY_COUNT(sContextMenuItems_BallsPocket);
@@ -2070,6 +2115,27 @@ static void ItemMenu_UseOutOfBattle(u8 taskId)
                 ItemUseOutOfBattle_Berry(taskId);
         }
     }
+}
+
+static void ItemMenu_UseOutOfBattle_VariableOldRod(u8 taskId)
+{
+    if (OW_VAR_VARIABLE_ROD_USE_TECHNIQUE != 0)
+        VarSet(OW_VAR_VARIABLE_ROD_USE_TECHNIQUE, OLD_ROD);
+    ItemMenu_UseOutOfBattle(taskId);
+}
+
+static void ItemMenu_UseOutOfBattle_VariableGoodRod(u8 taskId)
+{
+    if (OW_VAR_VARIABLE_ROD_USE_TECHNIQUE != 0)
+        VarSet(OW_VAR_VARIABLE_ROD_USE_TECHNIQUE, GOOD_ROD);
+    ItemMenu_UseOutOfBattle(taskId);
+}
+
+static void ItemMenu_UseOutOfBattle_VariableSuperRod(u8 taskId)
+{
+    if (OW_VAR_VARIABLE_ROD_USE_TECHNIQUE != 0)
+        VarSet(OW_VAR_VARIABLE_ROD_USE_TECHNIQUE, SUPER_ROD);
+    ItemMenu_UseOutOfBattle(taskId);
 }
 
 static void ItemMenu_Toss(u8 taskId)

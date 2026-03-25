@@ -13980,6 +13980,23 @@ const struct ItemInfo gItemsInfo[] =
         .iconPalette = gItemIconPalette_SuperRod,
     },
 
+    [ITEM_VARIABLE_ROD] =
+    {
+        .name = ITEM_NAME("Fishing Rod"),
+        .price = 0,
+        .description = COMPOUND_STRING(
+            "A versatile rod able\n"
+            "to perform every\n"
+            "known fishing method."),
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_FIELD,
+        .fieldUseFunc = ItemUseOutOfBattle_VariableRod,
+        .secondaryId = SUPER_ROD,
+        .iconPic = gItemIcon_SuperRod,
+        .iconPalette = gItemIconPalette_SuperRod,
+    },
+
     [ITEM_DOWSING_MACHINE] =
     {
         .name = ITEM_NAME("Dowsing Machine"),

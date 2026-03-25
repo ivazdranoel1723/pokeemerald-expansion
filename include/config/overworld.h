@@ -148,4 +148,8 @@
 // Trainer Rematches
 #define OW_REMATCH_BADGE_COUNT      5 // Number of badges necessary before the match call or vs seeker features allow rematches
 
+#define OW_VAR_VARIABLE_ROD_USE_TECHNIQUE       0     // If this var has a value, the game will use it to remember the used fishing technique.
+#define OW_FLAG_VARIABLE_ROD_GOOD_TECHNIQUE     0     // If this flag is set, the game will unlock the 'good fishing technique'.
+#define OW_FLAG_VARIABLE_ROD_SUPER_TECHNIQUE    0     // If this flag is set, the game will unlock the 'super fishing technique'.
+
 #endif // GUARD_CONFIG_OVERWORLD_H

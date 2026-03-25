@@ -1611,11 +1611,11 @@ PalletTown_ProfessorOaksLab_EventScript_Birchs_Bag::
 # 806 "data/maps/PalletTown_ProfessorOaksLab_Frlg/scripts.pory"
 	lockall
 # 807 "data/maps/PalletTown_ProfessorOaksLab_Frlg/scripts.pory"
-	callnative StartNewPokeballCaseUI
-# 808 "data/maps/PalletTown_ProfessorOaksLab_Frlg/scripts.pory"
-	waitstate
-# 809 "data/maps/PalletTown_ProfessorOaksLab_Frlg/scripts.pory"
 	goto_if_set FLAG_SYS_POKEMON_GET, PalletTown_ProfessorOaksLab_EventScript_BirchsBag_AlreadyUsed
+# 808 "data/maps/PalletTown_ProfessorOaksLab_Frlg/scripts.pory"
+	callnative StartNewPokeballCaseUI
+# 809 "data/maps/PalletTown_ProfessorOaksLab_Frlg/scripts.pory"
+	waitstate
 # 810 "data/maps/PalletTown_ProfessorOaksLab_Frlg/scripts.pory"
 	goto_if_set FLAG_CHOSE_MUDKIP_BALL, PalletTown_ProfessorOaksLab_EventScript_ReceivedMudkip
 # 811 "data/maps/PalletTown_ProfessorOaksLab_Frlg/scripts.pory"
