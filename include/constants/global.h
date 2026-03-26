@@ -249,4 +249,12 @@ enum Connection
 #include "config/test.h"
 #endif
 
+enum Season
+{
+    SEASON_SPRING,
+    SEASON_SUMMER,
+    SEASON_AUTUMN,
+    SEASON_WINTER,
+};
+
 #endif // GUARD_CONSTANTS_GLOBAL_H

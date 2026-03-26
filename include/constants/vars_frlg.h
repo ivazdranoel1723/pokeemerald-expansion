@@ -153,7 +153,7 @@
 #define VAR_MAP_SCENE_MT_MOON_B2F                                              0x408B
 
 
-#define VAR_0x408C                 0x408C
+#define VAR_CURRENT_SEASON         0x408C
 #define VAR_0x408D                 0x408D
 #define VAR_0x408E                 0x408E
 #define VAR_NUZLOCKE_ENCOUNTERS_1  0x408F // Nuzlocke: Track first encounters in routes/areas (32 bits)

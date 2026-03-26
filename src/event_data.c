@@ -274,3 +274,12 @@ bool8 FlagGet(u16 id)
 
     return TRUE;
 }
+
+//Define this properly in include/constants/vars.h in an unused var spot
+#define VAR_CURRENT_SEASON 0x408C
+
+u8 getCurrentSeason(void)
+{
+    return VarGet(VAR_CURRENT_SEASON);
+}
+
