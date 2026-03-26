@@ -11,6 +11,7 @@
 #include "battle_setup.h"
 #include "battle_tv.h"
 #include "cable_club.h"
+#include "dynamic_palettes.h"
 #include "event_data.h"
 #include "event_object_movement.h"
 #include "item.h"
@@ -2850,6 +2851,11 @@ void BtlController_HandleIntroTrainerBallThrow(enum BattlerId battler, u16 tagTr
 {
     u8 taskId;
     enum BattleSide side = GetBattlerSide(battler);
+
+    /* Load dynamic player battle-back palette into the OBJ palette slot for this battler.
+       Use the paletteNum/tag passed in (tagTrainerPal) to compute the OBJ_PLTT_ID.
+       This replaces the previous LoadCompressedPalette(...) call. */
+    DynPal_LoadPaletteByOffset(sDynPalPlayerBattleBack, OBJ_PLTT_ID(tagTrainerPal));
 
     SetSpritePrimaryCoordsFromSecondaryCoords(&gSprites[gBattleStruct->trainerSlideSpriteIds[battler]]);
     if (side == B_SIDE_PLAYER)

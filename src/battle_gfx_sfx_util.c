@@ -8,6 +8,7 @@
 #include "main.h"
 #include "menu.h"
 #include "dma3.h"
+#include "dynamic_palettes.h"
 #include "malloc.h"
 #include "graphics.h"
 #include "random.h"
@@ -29,6 +30,7 @@
 #include "constants/battle_palace.h"
 #include "constants/battle_move_effects.h"
 #include "constants/event_objects.h" // only for SHADOW_SIZE constants
+#include "constants/trainers.h"
 
 // this file's functions
 static u8 GetBattlePalaceMoveGroup(enum BattlerId battler, enum Move move);
@@ -701,13 +703,30 @@ void DecompressTrainerBackPic(enum TrainerPicID backPicId, enum BattlerId battle
 {
     enum BattlerPosition position = GetBattlerPosition(battler);
     CopyTrainerBackspriteFramesToDest(backPicId, gMonSpritesGfxPtr->spritesGfx[position]);
+
+    /* DYNPAL: Use dynamic palette for player back sprites (handles FRLG and Emerald names) */
+    if (backPicId == TRAINER_BACK_PIC_PLAYER_MALE || backPicId == TRAINER_BACK_PIC_PLAYER_FEMALE)
+    {
+        DynPal_LoadPaletteByOffset(sDynPalPlayerBattleBack, OBJ_PLTT_ID(battler));
+        return;
+    }
+
+    /* Non-player trainers: keep original behavior */
+#if defined(gTrainerBacksprites)
     LoadSpritePalette(&gTrainerBacksprites[backPicId].palette);
+#elif defined(gTrainerBackPicPaletteTable)
+    LoadCompressedPalette(gTrainerBackPicPaletteTable[backPicId].data,
+                          OBJ_PLTT_ID(battler), PLTT_SIZE_4BPP);
+#else
+    LoadSpritePalette(&gTrainerBacksprites[backPicId].palette);
+#endif
 }
 
 void FreeTrainerFrontPicPalette(u16 frontPicId)
 {
     FreeSpritePaletteByTag(gTrainerSprites[frontPicId].palette.tag);
 }
+
 
 // Unused.
 void BattleLoadAllHealthBoxesGfxAtOnce(void)

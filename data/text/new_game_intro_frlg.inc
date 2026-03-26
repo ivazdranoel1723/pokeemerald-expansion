@@ -286,6 +286,9 @@ gOakSpeech_Text_MinimalGrindingYes::
 gOakSpeech_Text_MinimalGrindingNo::
     .string "As you wish.\n"
     .string "The classic challenge awaits!$"
+	
+gText_NewGame_ChooseTones::
+	.string "Tell me more about yourself.$"
 
 gOakSpeech_Text_LetsGo::
 	.string "{PLAYER}!\p"
