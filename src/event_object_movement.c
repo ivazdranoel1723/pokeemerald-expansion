@@ -529,19 +529,12 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_RubySapphireBrendan,   OBJ_EVENT_PAL_TAG_RS_BRENDAN},
     {gObjectEventPal_RubySapphireMay,       OBJ_EVENT_PAL_TAG_RS_MAY},
 #if IS_FRLG
-<<<<<<< Updated upstream
-    {sDynPalPlayerOverworld,                OBJ_EVENT_PAL_TAG_PLAYER_RED},
-    {sDynPalPlayerReflection,               OBJ_EVENT_PAL_TAG_PLAYER_RED_REFLECTION},
-    {sDynPalPlayerOverworld,                OBJ_EVENT_PAL_TAG_PLAYER_GREEN},
-    {sDynPalPlayerReflection,               OBJ_EVENT_PAL_TAG_PLAYER_GREEN_REFLECTION},
-=======
     //PlayerFRLG and RED/GREEN changed to dynpal system
     {sDynPalPlayerOverworld,            OBJ_EVENT_PAL_TAG_PLAYER_RED},
     {sDynPalPlayerReflection,           OBJ_EVENT_PAL_TAG_PLAYER_RED_REFLECTION},
     {sDynPalPlayerOverworld,            OBJ_EVENT_PAL_TAG_PLAYER_GREEN},
     {sDynPalPlayerReflection,           OBJ_EVENT_PAL_TAG_PLAYER_GREEN_REFLECTION},
     {gObjectEventPal_NewBlue,               OBJ_EVENT_PAL_TAG_NEW_BLUE},
->>>>>>> Stashed changes
     {gObjectEventPal_NpcBlue,               OBJ_EVENT_PAL_TAG_NPC_BLUE},
     {gObjectEventPal_NpcPink,               OBJ_EVENT_PAL_TAG_NPC_PINK},
     {gObjectEventPal_NpcGreen,              OBJ_EVENT_PAL_TAG_NPC_GREEN},

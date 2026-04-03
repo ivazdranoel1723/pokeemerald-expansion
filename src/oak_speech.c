@@ -1411,40 +1411,6 @@ static void Task_OakSpeech_ClearGenderWindows(u8 taskId)
     gTasks[taskId].func = Task_OakSpeech_LoadPlayerPic;
 }
 
-<<<<<<< Updated upstream
-// DYNPAL Game Intro Tasks (Oak speech version)
-static void Task_NewGame_DynPal_ChoosePlayerTonesStart(u8 taskId)
-{
-    // Clear any temporary message window and print the dynpal prompt using Oak helpers
-    ClearDialogWindowAndFrame(WIN_INTRO_TEXTBOX, TRUE);
-    StringExpandPlaceholders(gStringVar4, gText_NewGame_ChooseTones);
-    AddTextPrinterForMessage(TRUE);
-
-    gTasks[taskId].func = Task_NewGame_DynPal_ShowToneMenu;
-}
-
-static void Task_NewGame_DynPal_ShowToneMenu(u8 taskId)
-{
-    // Wait for the message printer to finish and for player input
-    if (!RunTextPrintersAndIsPrinter0Active() && ((JOY_NEW(A_BUTTON)) || (JOY_NEW(B_BUTTON))))
-    {
-        // Show the full three-part dynpal menu in overworld preview mode.
-        // Use Oak resume task for both finish and cancel so Oak continues either way.
-        DynPal_ShowMenuSequence(taskId, Task_OakSpeech_ResumeAfterDynPal, Task_OakSpeech_ResumeAfterDynPal, TRUE);
-    }
-}
-
-// Clear some stuff upon dynpal cancel and return to Oak's gender selection
-static void Task_NewGame_CharacterRestart(u8 taskId)
-{
-    // Use Oak helpers instead of Birch helpers
-    ClearDialogWindowAndFrame(WIN_INTRO_TEXTBOX, TRUE);
-    gTasks[taskId].tTimer = 0;
-    // Return to Oak's gender selection flow
-    gTasks[taskId].func = Task_OakSpeech_ShowGenderOptions;
-}
-=======
->>>>>>> Stashed changes
 
 static void Task_OakSpeech_LoadPlayerPic(u8 taskId)
 {
@@ -1456,66 +1422,11 @@ static void Task_OakSpeech_LoadPlayerPic(u8 taskId)
     else
         LoadTrainerPic(FEMALE_PLAYER_PIC, 0);
 
-<<<<<<< Updated upstream
-    // Start the fade/appearance for the trainer preview
-    CreateFadeOutTask(taskId, 2);
-    gTasks[taskId].tTimer = 32;
-
-    // Preload intro tone indices so the preview shows the saved/custom parts
-    DynPal_LoadIntroToneIndices();
-
-    // Wait here until the trainer preview fade is finished and the sprite is visible.
-    // We use a short waiting task so the trainer has time to appear before the menu opens.
-    gTasks[taskId].func = Task_OakSpeech_WaitForTrainerPicThenShowDynPal;
-}
-
-static void Task_OakSpeech_WaitForTrainerPicThenShowDynPal(u8 taskId)
-{
-    // Wait until the fade task has finished and the trainer sprite is visible.
-    // Use the same timer you set earlier; decrement it each frame.
-    if (gTasks[taskId].tTimer != 0)
-    {
-        gTasks[taskId].tTimer--;
-        return;
-    }
-
-    // Create a dedicated resume task that will continue Oak speech after the menu finishes.
-    u8 resumeTaskId = CreateTask(Task_OakSpeech_ResumeAfterDynPal, 0);
-    // Store the oak task id in the resume task so it can restore Oak flow later
-    gTasks[resumeTaskId].data[0] = taskId;
-
-    // Show the full three-part dynpal menu in overworld preview mode.
-    DynPal_ShowMenuSequence(resumeTaskId, Task_OakSpeech_ResumeAfterDynPal, Task_OakSpeech_ResumeAfterDynPal, TRUE);
-
-    // Suspend the Oak task; the resume task will set it back to the naming step.
-    gTasks[taskId].func = Task_OakSpeech_WaitForDynPal;
-}
-
-// Suspended Oak task loop while dynpal menu is active.
-// Nothing to do here; resume is handled by Task_OakSpeech_ResumeAfterDynPal.
-static void Task_OakSpeech_WaitForDynPal(u8 taskId)
-{
-    // Intentionally empty — waiting for resume task to restore Oak flow.
-}
-
-// Resume task called by DynPal_ShowMenuSequence when the menu finishes.
-// Restores the original Oak task to continue to the naming step.
-static void Task_OakSpeech_ResumeAfterDynPal(u8 taskId)
-{
-    u8 oakTaskId = gTasks[taskId].data[0];
-
-    // Restore Oak task to the naming step with the same timer you used previously.
-    gTasks[oakTaskId].tTimer = 32;
-    gTasks[oakTaskId].func = Task_OakSpeech_YourNameWhatIsIt;
-
-    DestroyTask(taskId);
-=======
     DynPal_LoadIntroToneIndices();
 
     CreateFadeOutTask(taskId, 2);
     gTasks[taskId].tTimer = 32;
     gTasks[taskId].func = Task_OakSpeech_DynPal_ChoosePlayerTonesStart;
->>>>>>> Stashed changes
 }
 
 
