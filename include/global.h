@@ -619,9 +619,11 @@ struct SaveBlock2
 #endif //FREE_RECORD_MIXING_HALL_RECORDS
     /*0x624*/ u16 contestLinkResults[CONTEST_CATEGORIES_COUNT][CONTESTANT_COUNT];
     /*0x64C*/ struct BattleFrontier frontier;
-              u8 dynPalPartAPreset;
-              u8 dynPalPartBPreset;
-              u8 dynPalPartCPreset;
+    u8 dynPalHairPreset;
+    u8 dynPalSkinPreset;
+    u8 dynPalPantsPreset;
+    u8 dynPalHatPreset;
+    u8 dynPalBackPackPreset;
     /*0xF2C*/ bool8 autoRun;
 }; // sizeof=0xF2C
 

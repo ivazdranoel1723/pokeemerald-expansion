@@ -296,3 +296,6 @@ gOakSpeech_Text_LetsGo::
 	.string "about to unfold!\p"
 	.string "A world of dreams and adventures\n"
 	.string "with POKéMON awaits! Let's go!$"
+
+gOakSpeech_Text_ChooseTones::
+	.string "Tell me more about yourself.$"

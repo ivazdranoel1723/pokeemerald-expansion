@@ -383,7 +383,7 @@ static void OpponentHandleDrawTrainerPic(enum BattlerId battler)
     {
         if (GetBattlerPosition(battler) == B_POSITION_OPPONENT_LEFT)
         {
-            trainerPicId = TRAINER_PIC_FRONT_LEAF;
+            trainerPicId = TRAINER_PIC_FRONT_NEW_BLUE;
             if (!(gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS))
                 xPos = 176;
             else

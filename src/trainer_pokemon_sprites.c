@@ -4,6 +4,7 @@
 #include "malloc.h"
 #include "palette.h"
 #include "decompress.h"
+#include "dynamic_palettes.h"
 #include "trainer_pokemon_sprites.h"
 #include "data.h"
 #include "pokemon.h"
@@ -287,20 +288,31 @@ static u16 LoadPicSpriteInWindow(u16 species, bool8 isShiny, u32 personality, bo
     return 0;
 }
 
-static u16 CreateTrainerCardSprite(u16 species, bool8 isShiny, u32 personality, bool8 isFrontPic, u16 destX, u16 destY, u8 paletteSlot, u8 windowId, bool8 isTrainer)
+static u16 CreateTrainerCardSprite(u16 species, bool8 isShiny, u32 personality, bool8 isFrontPic,
+                                   u16 destX, u16 destY, u8 paletteSlot, u8 windowId, bool8 isTrainer)
 {
     u8 *framePics;
 
     framePics = Alloc(TRAINER_PIC_SIZE * MAX_TRAINER_PIC_FRAMES);
     if (framePics && !DecompressPic(species, personality, isFrontPic, framePics, isTrainer))
     {
-        BlitBitmapRectToWindow(windowId, framePics, 0, 0, TRAINER_PIC_WIDTH, TRAINER_PIC_HEIGHT, destX, destY, TRAINER_PIC_WIDTH, TRAINER_PIC_HEIGHT);
+        BlitBitmapRectToWindow(windowId, framePics,
+                               0, 0,
+                               TRAINER_PIC_WIDTH, TRAINER_PIC_HEIGHT,
+                               destX, destY,
+                               TRAINER_PIC_WIDTH, TRAINER_PIC_HEIGHT);
+
         LoadPicPaletteBySlot(species, isShiny, personality, paletteSlot, isTrainer);
+
+        DynPal_LoadPaletteByOffset(sDynPalPlayerBattleFront, BG_PLTT_ID(paletteSlot));
+
         Free(framePics);
         return 0;
     }
+
     return 0xFFFF;
 }
+
 
 u16 CreateMonPicSprite(u16 species, bool8 isShiny, u32 personality, bool8 isFrontPic, s16 x, s16 y, u8 paletteSlot, u16 paletteTag)
 {

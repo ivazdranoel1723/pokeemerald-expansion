@@ -503,7 +503,7 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Brendan,               OBJ_EVENT_PAL_TAG_BRENDAN},
     {gObjectEventPal_BrendanReflection,     OBJ_EVENT_PAL_TAG_BRENDAN_REFLECTION},
     {gObjectEventPal_BridgeReflection,      OBJ_EVENT_PAL_TAG_BRIDGE_REFLECTION},
-    {gObjectEventPal_PlayerUnderwater,      OBJ_EVENT_PAL_TAG_PLAYER_UNDERWATER},
+    {sDynPalPlayerUnderwater,      OBJ_EVENT_PAL_TAG_PLAYER_UNDERWATER},
     {gObjectEventPal_QuintyPlump,           OBJ_EVENT_PAL_TAG_QUINTY_PLUMP},
     {gObjectEventPal_QuintyPlumpReflection, OBJ_EVENT_PAL_TAG_QUINTY_PLUMP_REFLECTION},
     {gObjectEventPal_Truck,                 OBJ_EVENT_PAL_TAG_TRUCK},
@@ -520,7 +520,8 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_GroudonReflection,     OBJ_EVENT_PAL_TAG_GROUDON_REFLECTION},
     {gObjectEventPal_SubmarineShadow,       OBJ_EVENT_PAL_TAG_SUBMARINE_SHADOW},
     {gObjectEventPal_Poochyena,             OBJ_EVENT_PAL_TAG_POOCHYENA},
-    {gObjectEventPal_RedLeaf,               OBJ_EVENT_PAL_TAG_RED_LEAF},
+    //RedLeaf changed to dynpal system
+    {sDynPalPlayerOverworld,                OBJ_EVENT_PAL_TAG_RED_LEAF},
     {gObjectEventPal_Deoxys,                OBJ_EVENT_PAL_TAG_DEOXYS},
     {gObjectEventPal_BirthIslandStone,      OBJ_EVENT_PAL_TAG_BIRTH_ISLAND_STONE},
     {gObjectEventPal_HoOh,                  OBJ_EVENT_PAL_TAG_HO_OH},
@@ -528,10 +529,19 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_RubySapphireBrendan,   OBJ_EVENT_PAL_TAG_RS_BRENDAN},
     {gObjectEventPal_RubySapphireMay,       OBJ_EVENT_PAL_TAG_RS_MAY},
 #if IS_FRLG
+<<<<<<< Updated upstream
     {sDynPalPlayerOverworld,                OBJ_EVENT_PAL_TAG_PLAYER_RED},
     {sDynPalPlayerReflection,               OBJ_EVENT_PAL_TAG_PLAYER_RED_REFLECTION},
     {sDynPalPlayerOverworld,                OBJ_EVENT_PAL_TAG_PLAYER_GREEN},
     {sDynPalPlayerReflection,               OBJ_EVENT_PAL_TAG_PLAYER_GREEN_REFLECTION},
+=======
+    //PlayerFRLG and RED/GREEN changed to dynpal system
+    {sDynPalPlayerOverworld,            OBJ_EVENT_PAL_TAG_PLAYER_RED},
+    {sDynPalPlayerReflection,           OBJ_EVENT_PAL_TAG_PLAYER_RED_REFLECTION},
+    {sDynPalPlayerOverworld,            OBJ_EVENT_PAL_TAG_PLAYER_GREEN},
+    {sDynPalPlayerReflection,           OBJ_EVENT_PAL_TAG_PLAYER_GREEN_REFLECTION},
+    {gObjectEventPal_NewBlue,               OBJ_EVENT_PAL_TAG_NEW_BLUE},
+>>>>>>> Stashed changes
     {gObjectEventPal_NpcBlue,               OBJ_EVENT_PAL_TAG_NPC_BLUE},
     {gObjectEventPal_NpcPink,               OBJ_EVENT_PAL_TAG_NPC_PINK},
     {gObjectEventPal_NpcGreen,              OBJ_EVENT_PAL_TAG_NPC_GREEN},

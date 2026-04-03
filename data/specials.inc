@@ -640,6 +640,9 @@ gSpecials::
 	def_special StickerManGetBragFlags
 	def_special CheckAddCoins
 	def_special DynPal_ShowFullToneMenu
-	def_special DynPal_ShowToneMenuA
-	def_special DynPal_ShowToneMenuB
-	def_special DynPal_ShowToneMenuC
+	def_special DynPal_ShowToneMenuHair
+	def_special DynPal_ShowToneMenuSkin
+	def_special DynPal_ShowToneMenuPants
+	def_special DynPal_ShowToneMenuHat
+	def_special DynPal_ShowToneMenuBackpack
+

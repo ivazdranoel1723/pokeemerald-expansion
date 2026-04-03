@@ -244,6 +244,15 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RedFieldMov
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RedFish;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RedVSSeeker;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RedVSSeekerBike;
+
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_NewBlue;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_NewBlueBike;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_NewBlueSurf;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_NewBlueFieldMove;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_NewBlueFish;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_NewBlueVSSeeker;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_NewBlueVSSeekerBike;
+
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GreenNormal;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GreenBike;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GreenSurf;
@@ -654,6 +663,13 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_RED_FIELD_MOVE] =           &gObjectEventGraphicsInfo_RedFieldMove,
     [OBJ_EVENT_GFX_RED_FISH] =                 &gObjectEventGraphicsInfo_RedFish,
     [OBJ_EVENT_GFX_RED_VS_SEEKER] =            &gObjectEventGraphicsInfo_RedVSSeeker,
+    [OBJ_EVENT_GFX_RED_VS_SEEKER_BIKE] =       &gObjectEventGraphicsInfo_RedVSSeekerBike,
+    [OBJ_EVENT_GFX_NEW_BLUE] =                 &gObjectEventGraphicsInfo_NewBlue,
+    [OBJ_EVENT_GFX_NEW_BLUE_BIKE] =            &gObjectEventGraphicsInfo_NewBlueBike,
+    [OBJ_EVENT_GFX_NEW_BLUE_SURF] =            &gObjectEventGraphicsInfo_NewBlueSurf,
+    [OBJ_EVENT_GFX_NEW_BLUE_FIELD_MOVE] =      &gObjectEventGraphicsInfo_NewBlueFieldMove,
+    [OBJ_EVENT_GFX_NEW_BLUE_FISH] =            &gObjectEventGraphicsInfo_NewBlueFish,
+    [OBJ_EVENT_GFX_NEW_BLUE_VS_SEEKER] =       &gObjectEventGraphicsInfo_NewBlueVSSeeker,
     [OBJ_EVENT_GFX_RED_VS_SEEKER_BIKE] =       &gObjectEventGraphicsInfo_RedVSSeekerBike,
     [OBJ_EVENT_GFX_GREEN_NORMAL] =             &gObjectEventGraphicsInfo_GreenNormal,
     [OBJ_EVENT_GFX_GREEN_BIKE] =               &gObjectEventGraphicsInfo_GreenBike,

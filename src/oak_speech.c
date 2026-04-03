@@ -126,6 +126,12 @@ static void Task_OakSpeech_FadePlayerPicToBlack(u8);
 static void Task_OakSpeech_WaitForFade(u8);
 static void Task_OakSpeech_FreeResources(u8);
 
+//DynPal-related tasks & functions
+// DYNPAL Intro seq funcs
+static void Task_OakSpeech_DynPal_ChoosePlayerTonesStart(u8 taskId);
+static void Task_OakSpeech_DynPal_ShowToneMenu(u8 taskId);
+static void Task_OakSpeech_DynPal_CharacterRestart(u8 taskId);
+
 static void CB2_ReturnFromNamingScreen(void);
 static void CreateSunfloraSprite(u8);
 static void CreatePikachuOrPlatformSprites(u8, u8);
@@ -1317,6 +1323,8 @@ static void Task_OakSpeech_ShowGenderOptions(u8 taskId)
 {
     if (!IsTextPrinterActiveOnWindow(WIN_INTRO_TEXTBOX))
     {
+        DynPal_LoadIntroToneIndices();
+
         gTasks[taskId].tMenuWindowId = AddWindow(&sIntro_WindowTemplates[WIN_INTRO_BOYGIRL]);
         PutWindowTilemap(gTasks[taskId].tMenuWindowId);
         DrawStdFrameWithCustomTileAndPalette(gTasks[taskId].tMenuWindowId, TRUE, STD_WINDOW_BASE_TILE_NUM, 14);
@@ -1343,16 +1351,51 @@ static void Task_OakSpeech_HandleGenderInput(u8 taskId)
     case 0: // MASCULINE
         gSaveBlock2Ptr->playerGender = MALE;
         break;
+
     case 1: // FEMININE
         gSaveBlock2Ptr->playerGender = FEMALE;
         break;
+
     case MENU_B_PRESSED:
     case MENU_NOTHING_CHOSEN:
         return;
     }
-    gTasks[taskId].func = Task_OakSpeech_ClearGenderWindows;
 
+    gTasks[taskId].func = Task_OakSpeech_ClearGenderWindows;
 }
+
+static void Task_OakSpeech_DynPal_ChoosePlayerTonesStart(u8 taskId)
+{
+    ClearDialogWindowAndFrame(WIN_INTRO_TEXTBOX, TRUE);
+
+    StringExpandPlaceholders(gStringVar4, gOakSpeech_Text_ChooseTones);
+    AddTextPrinterForMessage(TRUE);
+
+    gTasks[taskId].func = Task_OakSpeech_DynPal_ShowToneMenu;
+}
+
+static void Task_OakSpeech_DynPal_ShowToneMenu(u8 taskId)
+{
+    if (!RunTextPrintersAndIsPrinter0Active()
+        && (JOY_NEW(A_BUTTON) || JOY_NEW(B_BUTTON)))
+    {
+        DynPal_ShowMenuSequence(
+            taskId,
+            Task_OakSpeech_YourNameWhatIsIt,     
+            Task_OakSpeech_DynPal_CharacterRestart,
+            FALSE
+        );
+    }
+}
+
+static void Task_OakSpeech_DynPal_CharacterRestart(u8 taskId)
+{
+    ClearDialogWindowAndFrame(WIN_INTRO_TEXTBOX, TRUE);
+
+    gTasks[taskId].tTimer = 0;
+    gTasks[taskId].func = Task_OakSpeech_ShowGenderOptions;
+}
+
 
 static void Task_OakSpeech_ClearGenderWindows(u8 taskId)
 {
@@ -1360,8 +1403,7 @@ static void Task_OakSpeech_ClearGenderWindows(u8 taskId)
 
     ClearStdWindowAndFrameToTransparent(tMenuWindowId, TRUE);
     RemoveWindow(tMenuWindowId);
-    tMenuWindowId = WIN_INTRO_TEXTBOX;
-    ClearDialogWindowAndFrame(tMenuWindowId, TRUE);
+    ClearDialogWindowAndFrame(WIN_INTRO_TEXTBOX, TRUE);
     FillBgTilemapBufferRect_Palette0(0, 0, 0, 0, 30, 20);
     CopyBgTilemapBufferToVram(0);
 
@@ -1369,6 +1411,7 @@ static void Task_OakSpeech_ClearGenderWindows(u8 taskId)
     gTasks[taskId].func = Task_OakSpeech_LoadPlayerPic;
 }
 
+<<<<<<< Updated upstream
 // DYNPAL Game Intro Tasks (Oak speech version)
 static void Task_NewGame_DynPal_ChoosePlayerTonesStart(u8 taskId)
 {
@@ -1400,6 +1443,8 @@ static void Task_NewGame_CharacterRestart(u8 taskId)
     // Return to Oak's gender selection flow
     gTasks[taskId].func = Task_OakSpeech_ShowGenderOptions;
 }
+=======
+>>>>>>> Stashed changes
 
 static void Task_OakSpeech_LoadPlayerPic(u8 taskId)
 {
@@ -1411,6 +1456,7 @@ static void Task_OakSpeech_LoadPlayerPic(u8 taskId)
     else
         LoadTrainerPic(FEMALE_PLAYER_PIC, 0);
 
+<<<<<<< Updated upstream
     // Start the fade/appearance for the trainer preview
     CreateFadeOutTask(taskId, 2);
     gTasks[taskId].tTimer = 32;
@@ -1463,7 +1509,15 @@ static void Task_OakSpeech_ResumeAfterDynPal(u8 taskId)
     gTasks[oakTaskId].func = Task_OakSpeech_YourNameWhatIsIt;
 
     DestroyTask(taskId);
+=======
+    DynPal_LoadIntroToneIndices();
+
+    CreateFadeOutTask(taskId, 2);
+    gTasks[taskId].tTimer = 32;
+    gTasks[taskId].func = Task_OakSpeech_DynPal_ChoosePlayerTonesStart;
+>>>>>>> Stashed changes
 }
+
 
 static void Task_OakSpeech_YourNameWhatIsIt(u8 taskId)
 {

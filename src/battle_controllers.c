@@ -2875,6 +2875,12 @@ void BtlController_HandleIntroTrainerBallThrow(enum BattlerId battler, u16 tagTr
 
     if (side == B_SIDE_PLAYER)
     {
+        u8 paletteNum = gSprites[gBattleStruct->trainerSlideSpriteIds[battler]].oam.paletteNum;
+
+        // DYNPAL: The trainer back palette is reloaded into a new slot when the ball throw animation starts. This seems weird, but keeping it to be safe
+        // If using RHH Expansion this function is moved to battle_controllers, so this must be moved
+        DynPal_LoadPaletteByOffset(sDynPalPlayerBattleBack, OBJ_PLTT_ID(paletteNum));
+
         StoreSpriteCallbackInData6(&gSprites[gBattleStruct->trainerSlideSpriteIds[battler]], SpriteCB_FreePlayerSpriteLoadMonSprite);
         StartSpriteAnim(&gSprites[gBattleStruct->trainerSlideSpriteIds[battler]], ShouldDoSlideInAnim(battler) ? 2 : 1);
     }
@@ -2894,6 +2900,7 @@ void BtlController_HandleIntroTrainerBallThrow(enum BattlerId battler, u16 tagTr
     gBattleSpritesDataPtr->animationData->introAnimActive = TRUE;
     gBattlerControllerFuncs[battler] = BattleControllerDummy;
 }
+
 
 static bool32 TwoMonsAtSendOut(enum BattlerId battler)
 {

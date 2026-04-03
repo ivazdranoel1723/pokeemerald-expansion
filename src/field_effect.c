@@ -38,6 +38,7 @@
 #include "constants/field_effects.h"
 #include "constants/flags.h"
 #include "constants/metatile_behaviors.h"
+#include "constants/trainers.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
 #include "constants/trainers.h"
@@ -983,54 +984,34 @@ u8 CreateTrainerSprite(u8 trainerSpriteID, s16 x, s16 y, u8 subpriority, u8 *buf
     struct SpriteTemplate spriteTemplate;
     bool32 alloced = FALSE;
 
-    /* Allocate memory for buffer */
     if (buffer == NULL)
     {
         buffer = Alloc(TRAINER_PIC_SIZE);
         alloced = TRUE;
     }
 
-    /* DYNPAL: override palette for player front sprites on supported builds.
-       Check common player front IDs/macros so this compiles for FRLG and Emerald variants. */
-#if defined(TRAINER_PIC_PLAYER_MALE) || defined(TRAINER_PIC_PLAYER_FEMALE) \
- || defined(TRAINER_PIC_BRENDAN) || defined(TRAINER_PIC_MAY) \
- || defined(TRAINER_PIC_RED) || defined(TRAINER_PIC_LEAF)
-    if (
-#if defined(TRAINER_PIC_PLAYER_MALE)
-        trainerSpriteID == TRAINER_PIC_PLAYER_MALE ||
-#endif
-#if defined(TRAINER_PIC_PLAYER_FEMALE)
-        trainerSpriteID == TRAINER_PIC_PLAYER_FEMALE ||
-#endif
-#if defined(TRAINER_PIC_BRENDAN)
-        trainerSpriteID == TRAINER_PIC_BRENDAN ||
-#endif
-#if defined(TRAINER_PIC_MAY)
-        trainerSpriteID == TRAINER_PIC_MAY ||
-#endif
-#if defined(TRAINER_PIC_RED)
-        trainerSpriteID == TRAINER_PIC_RED ||
-#endif
-#if defined(TRAINER_PIC_LEAF)
-        trainerSpriteID == TRAINER_PIC_LEAF
-#else
-        0
-#endif
-       )
+    // Load palette
+    if (trainerSpriteID == TRAINER_PIC_FRONT_BRENDAN
+     || trainerSpriteID == TRAINER_PIC_FRONT_MAY
+     || trainerSpriteID == TRAINER_PIC_FRONT_RED
+     || trainerSpriteID == TRAINER_PIC_FRONT_NEW_BLUE)
     {
-        /* Load assembled dynamic front/battle palette into the sprite tag slot */
-        DynPal_LoadPaletteByTag(sDynPalPlayerBattleFront, gTrainerSprites[trainerSpriteID].palette.tag);
+        DynPal_LoadPaletteByTag(
+            sDynPalPlayerBattleFront,
+            gTrainerSprites[trainerSpriteID].palette.tag
+        );
     }
     else
     {
         LoadSpritePalette(&gTrainerSprites[trainerSpriteID].palette);
     }
-#else
-    /* No player front macros available in this build; fall back to normal load */
-    LoadSpritePalette(&gTrainerSprites[trainerSpriteID].palette);
-#endif
 
-    LoadCompressedSpriteSheetOverrideBuffer(&gTrainerSprites[trainerSpriteID].frontPic, buffer);
+    // Load sprite graphics
+    LoadCompressedSpriteSheetOverrideBuffer(
+        &gTrainerSprites[trainerSpriteID].frontPic,
+        buffer
+    );
+
     if (alloced)
         Free(buffer);
 
@@ -1041,6 +1022,7 @@ u8 CreateTrainerSprite(u8 trainerSpriteID, s16 x, s16 y, u8 subpriority, u8 *buf
     spriteTemplate.images = NULL;
     spriteTemplate.affineAnims = gDummySpriteAffineAnimTable;
     spriteTemplate.callback = SpriteCallbackDummy;
+
     return CreateSprite(&spriteTemplate, x, y, subpriority);
 }
 

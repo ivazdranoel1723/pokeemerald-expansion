@@ -757,6 +757,7 @@ extern const u8 gOakSpeech_Text_YourRivalsNameWhatWasIt[];
 extern const u8 gOakSpeech_Text_ConfirmRivalName[];
 extern const u8 gOakSpeech_Text_RememberRivalsName[];
 extern const u8 gOakSpeech_Text_LetsGo[];
+extern const u8 gOakSpeech_Text_ChooseTones[];
 extern const u8 EventScript_Food[];
 extern const u8 EventScript_ImpressiveMachine[];
 extern const u8 EventScript_Blueprints[];

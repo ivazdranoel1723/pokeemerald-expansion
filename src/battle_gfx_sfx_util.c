@@ -29,6 +29,7 @@
 #include "constants/rgb.h"
 #include "constants/battle_palace.h"
 #include "constants/battle_move_effects.h"
+#include "constants/trainers.h"
 #include "constants/event_objects.h" // only for SHADOW_SIZE constants
 #include "constants/trainers.h"
 
@@ -704,23 +705,17 @@ void DecompressTrainerBackPic(enum TrainerPicID backPicId, enum BattlerId battle
     enum BattlerPosition position = GetBattlerPosition(battler);
     CopyTrainerBackspriteFramesToDest(backPicId, gMonSpritesGfxPtr->spritesGfx[position]);
 
-    /* DYNPAL: Use dynamic palette for player back sprites (handles FRLG and Emerald names) */
-    if (backPicId == TRAINER_BACK_PIC_PLAYER_MALE || backPicId == TRAINER_BACK_PIC_PLAYER_FEMALE)
+    // DYNPAL: Override palette load for player back sprite
+    if (backPicId == TRAINER_PIC_BACK_BRENDAN || backPicId == TRAINER_PIC_BACK_MAY)
     {
         DynPal_LoadPaletteByOffset(sDynPalPlayerBattleBack, OBJ_PLTT_ID(battler));
-        return;
     }
-
-    /* Non-player trainers: keep original behavior */
-#if defined(gTrainerBacksprites)
-    LoadSpritePalette(&gTrainerBacksprites[backPicId].palette);
-#elif defined(gTrainerBackPicPaletteTable)
-    LoadCompressedPalette(gTrainerBackPicPaletteTable[backPicId].data,
-                          OBJ_PLTT_ID(battler), PLTT_SIZE_4BPP);
-#else
-    LoadSpritePalette(&gTrainerBacksprites[backPicId].palette);
-#endif
+    else
+    {
+        LoadSpritePalette(&gTrainerBacksprites[backPicId].palette);
+    }
 }
+
 
 void FreeTrainerFrontPicPalette(u16 frontPicId)
 {

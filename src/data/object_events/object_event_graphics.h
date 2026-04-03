@@ -351,6 +351,10 @@ const u32 gObjectEventPic_MovingBox[] = INCBIN_U32("graphics/object_events/pics/
 const u16 gObjectEventPal_MovingBox[] = INCBIN_U16("graphics/object_events/palettes/moving_box.gbapal");
 const u16 gObjectEventPal_RedLeaf[] = INCBIN_U16("graphics/object_events/palettes/red_leaf.gbapal");
 const u32 gObjectEventPic_Red[] = INCBIN_U32("graphics/object_events/pics/people/red.4bpp");
+
+const u16 gObjectEventPal_NewBlue[] = INCBIN_U16("graphics/object_events/palettes/new_blue.gbapal");
+const u32 gObjectEventPic_NewBlue[] = INCBIN_U32("graphics/object_events/pics/people/new_blue.4bpp");
+
 const u32 gObjectEventPic_Leaf[] = INCBIN_U32("graphics/object_events/pics/people/leaf.4bpp");
 const u16 gObjectEventPal_BirthIslandStone[] = INCBIN_U16("graphics/object_events/palettes/birth_island_stone.gbapal");
 const u32 gObjectEventPic_BirthIslandStone[] = INCBIN_U32("graphics/object_events/pics/misc/birth_island_stone.4bpp");
@@ -480,6 +484,13 @@ const u16 gObjectEventPic_RedSurfRun[] = INCBIN_U16("graphics/object_events/pics
 const u16 gObjectEventPic_RedFish[] = INCBIN_U16("graphics/object_events/pics/people/red/red_fish.4bpp");
 const u16 gObjectEventPic_RedItem[] = INCBIN_U16("graphics/object_events/pics/people/red/red_item.4bpp");
 const u16 gObjectEventPic_RedVSSeekerBike[] = INCBIN_U16("graphics/object_events/pics/people/red/red_vs_seeker_bike.4bpp");
+const u16 gObjectEventPic_NewBlue[] = INCBIN_U16("graphics/object_events/pics/people/new_blue/new_blue.4bpp");
+const u16 gObjectEventPic_NewBlueBike[] = INCBIN_U16("graphics/object_events/pics/people/new_blue/new_blue_bike.4bpp");
+const u16 gObjectEventPic_NewBlueSurf[] = INCBIN_U16("graphics/object_events/pics/people/new_blue/new_blue_surf.4bpp");
+const u16 gObjectEventPic_NewBlueSurfRun[] = INCBIN_U16("graphics/object_events/pics/people/new_blue/new_blue_surf_run.4bpp");
+const u16 gObjectEventPic_NewBlueFish[] = INCBIN_U16("graphics/object_events/pics/people/new_blue/new_blue_fish.4bpp");
+const u16 gObjectEventPic_NewBlueItem[] = INCBIN_U16("graphics/object_events/pics/people/new_blue/new_blue_item.4bpp");
+const u16 gObjectEventPic_NewBlueVSSeekerBike[] = INCBIN_U16("graphics/object_events/pics/people/new_blue/new_blue_vs_seeker_bike.4bpp");
 const u16 gObjectEventPic_GreenNormal[] = INCBIN_U16("graphics/object_events/pics/people/leaf/green_normal.4bpp");
 const u16 gObjectEventPic_GreenBike[] = INCBIN_U16("graphics/object_events/pics/people/leaf/green_bike.4bpp");
 const u16 gObjectEventPic_GreenSurf[] = INCBIN_U16("graphics/object_events/pics/people/leaf/green_surf.4bpp");

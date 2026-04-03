@@ -2224,7 +2224,7 @@ extern const u8 gText_OakSpeech_YesNuzlocke[];
 extern const u8 gOakSpeech_Text_MinimalGrinding[];
 extern const u8 gOakSpeech_Text_MinimalGrindingNo[];
 extern const u8 gOakSpeech_Text_MinimalGrindingYes[];
-extern const u8 gText_NewGame_ChooseTones[];
+extern const u8 gOakSpeech_Text_ChooseTones[];
 extern const u8 gText_OakSpeech_Farewell[];
 
 extern const u8 gText_Masculine[];
